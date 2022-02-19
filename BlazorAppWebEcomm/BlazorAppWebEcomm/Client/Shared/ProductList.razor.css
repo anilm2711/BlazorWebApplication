@@ -1,0 +1,52 @@
+﻿.media-img {
+        display: block;
+        margin-left: auto;
+        margin-right: auto;
+        width: 200px;
+        height:300px;
+        border-radius:6px;
+        margin:0 10px 10px 10px;
+        transition:transform .2s;
+    }
+    .media-img:hover {
+        transform: scale(1.1);
+    }
+.overlay {
+        position: absolute;
+        bottom: 0;
+        background: rgb(0, 0, 0);
+        background: rgba(0, 0, 0, 0.5); /* Black see-through */
+        color: #f1f1f1;
+        width: 100%;
+        transition: .5s ease;
+        opacity: 0;
+        color: white;
+        font-size: 20px;
+        padding: 20px;
+        text-align: center;
+    }
+.media{
+    display:flex;
+    align-items:flex-start;
+}
+.medid-body{
+    flex:1;
+}
+.media-img-wrapper {
+    max-width: 500px;
+    max-height: 500px;
+    text-align: center;
+}
+.price {
+    color: green;
+}
+@media(max-width:1023.98px){
+    .media-img{
+        max-width:300px
+    }
+    .media-img-wrapper{
+        width:100%;
+        height:auto;
+    }
+}
+
