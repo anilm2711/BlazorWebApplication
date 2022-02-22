@@ -1,4 +1,5 @@
 ﻿using BlazorAppWebEcomm.Server.Models;
+using BlazorAppWebEcomm.Server.Services.ProductServices;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
@@ -9,27 +10,18 @@ namespace BlazorAppWebEcomm.Server.Controllers
     [ApiController]
     public class ProductController : ControllerBase
     {
-        private readonly ECommDataBaseContext _context;
+        private readonly IProductService _productService;
 
-        public ProductController(ECommDataBaseContext context)
+        public ProductController(IProductService productService)
         {
-            this._context = context;
+            this._productService = productService;
         }
 
         [HttpGet]
-        public async Task<IActionResult> GetProducts()
+        public async Task<ActionResult<ServiceResponse<List<Models.Product>>>> GetProducts()
         {
-            try
-            {
-                var products = await _context.Products.ToListAsync();
-                return Ok(products);
-            }
-            catch (Exception)
-            {
-
-                return NoContent();
-            }
-            
+            ServiceResponse<List<Models.Product>>? products = await _productService.GetProductsAsync();
+            return Ok(products);
         }
     }
 }
