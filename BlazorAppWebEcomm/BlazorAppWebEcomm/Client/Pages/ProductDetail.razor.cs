@@ -9,7 +9,7 @@ namespace BlazorAppWebEcomm.Client.Pages
     {
         [Inject]
         public IProductService  ProductService { get; set; }
-        private Product? Product { get; set; } = null;
+        private Product Product { get; set; } = null;
         public string message { get; set; } = string.Empty;
 
         [Parameter]

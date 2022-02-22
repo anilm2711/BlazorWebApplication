@@ -1,11 +1,4 @@
-﻿.media {
-    display: flex;
-    align-items: flex-start;
-}
-.medid-body {
-    flex: 1;
-}
-.media-img {
+﻿.media-img {
     max-width: 500px;
     max-height: 500px;
     border-radius: 6px;
