@@ -23,5 +23,13 @@ namespace BlazorAppWebEcomm.Server.Controllers
             ServiceResponse<List<Models.Product>>? products = await _productService.GetProductsAsync();
             return Ok(products);
         }
+
+        [HttpGet]
+        [Route("{productId}")]
+        public async Task<ActionResult<ServiceResponse<Models.Product>>> GetProduct(int productId)
+        {
+            ServiceResponse<Models.Product>? product = await _productService.GetProductAsync(productId);
+            return Ok(product);
+        }
     }
 }
