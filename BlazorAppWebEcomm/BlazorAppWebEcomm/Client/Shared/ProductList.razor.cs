@@ -20,6 +20,21 @@ namespace BlazorAppWebEcomm.Client.Shared
         {
             ProductService.ProductsChanged-= StateHasChanged;
         }
+
+        internal string GetPriceText(Product product)
+        {
+            var variants = product.ProductVariants;
+            if (variants.Count() == 0)
+            {
+                return string.Empty;
+            }
+            else if (variants.Count == 1)
+            {
+                return $"${variants[0].Price}";
+            }
+            decimal minprice = variants.Min(p => p.Price);
+            return $"starting at ${minprice}";
+        }
         
     }
 }

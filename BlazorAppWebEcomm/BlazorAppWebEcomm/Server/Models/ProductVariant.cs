@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Text.Json.Serialization;
 
 namespace BlazorAppWebEcomm.Server.Models
 {
@@ -11,6 +12,7 @@ namespace BlazorAppWebEcomm.Server.Models
         public decimal? Price { get; set; }
         public decimal? OriginalPrice { get; set; }
 
+        [JsonIgnore]
         public virtual Product? Product { get; set; }
         public virtual ProductType? ProductType { get; set; }
     }

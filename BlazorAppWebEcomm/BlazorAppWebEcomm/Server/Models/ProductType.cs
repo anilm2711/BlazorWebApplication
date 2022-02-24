@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Text.Json.Serialization;
 
 namespace BlazorAppWebEcomm.Server.Models
 {
@@ -13,6 +14,7 @@ namespace BlazorAppWebEcomm.Server.Models
         public int Id { get; set; }
         public string? Name { get; set; }
 
+        [JsonIgnore]
         public virtual ICollection<ProductVariant> ProductVariants { get; set; }
     }
 }

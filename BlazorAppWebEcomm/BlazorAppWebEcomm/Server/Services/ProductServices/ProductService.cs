@@ -15,7 +15,9 @@ namespace BlazorAppWebEcomm.Server.Services.ProductServices
         public async Task<ServiceResponse<Models.Product>> GetProductAsync(int productId)
         {
             var response = new ServiceResponse<Models.Product>();
-            var product =await _eCommDataBaseContext.Products.FindAsync(productId);
+            var product =await _eCommDataBaseContext.Products
+                .Include(e=>e.ProductVariants)
+                .ThenInclude(x=>x.ProductType).FirstOrDefaultAsync(p => p.ProductId == productId);
             if (product == null)
             {
                 response.Success = false;
@@ -35,7 +37,7 @@ namespace BlazorAppWebEcomm.Server.Services.ProductServices
             {
                 responseProdcuts = new ServiceResponse<List<Models.Product>>()
                 {
-                    Data = await _eCommDataBaseContext.Products.Where(p => p.Category.Url.ToLower().Equals(categoryUrl.ToLower())).ToListAsync()
+                    Data = await _eCommDataBaseContext.Products.Include(x=>x.ProductVariants).Where(p => p.Category.Url.ToLower().Equals(categoryUrl.ToLower())).ToListAsync()
                 };
             }
             catch (Exception ex)
@@ -53,7 +55,7 @@ namespace BlazorAppWebEcomm.Server.Services.ProductServices
             {
                 responseProdcuts = new ServiceResponse<List<Models.Product>>()
                 {
-                    Data = await _eCommDataBaseContext.Products.ToListAsync()
+                    Data = await _eCommDataBaseContext.Products.Include(e=>e.ProductVariants).ToListAsync()
                 };
             }
             catch (Exception ex)

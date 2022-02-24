@@ -9,7 +9,26 @@
         <div class="media-body">
             <h2 class="mb-0">@Product.Title</h2>
             <p>@Product.Description</p>
-            <h4 class="price">Price:$ @*@Product.Price*@ </h4>
+            @if (Product.ProductVariants != null && Product.ProductVariants.Count() > 0)
+            {
+                <div class="mb-3"> 
+                    <select class="form-select" @bind=@currentTypeId>
+                        @foreach (var vart in Product.ProductVariants)
+                        {
+                            <option value="@vart.ProductTypeId">@vart.ProductType.Name</option>
+                        }
+                    </select>
+                </div>
+            }
+            @if (GetSelectedProductVariant() != null)
+            {
+                @if (GetSelectedProductVariant().OriginalPrice > GetSelectedProductVariant().Price)
+                {
+                    <h6 class="text-muted original-price">$@GetSelectedProductVariant().OriginalPrice </h6>
+                }
+                <h4 class="price">Price: @GetSelectedProductVariant().Price </h4>
+            }
+
         </div>
 
     </div>
