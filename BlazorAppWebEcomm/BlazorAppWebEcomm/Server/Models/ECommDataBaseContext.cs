@@ -18,6 +18,8 @@ namespace BlazorAppWebEcomm.Server.Models
 
         public virtual DbSet<Category> Categories { get; set; } = null!;
         public virtual DbSet<Product> Products { get; set; } = null!;
+        public virtual DbSet<ProductType> ProductTypes { get; set; } = null!;
+        public virtual DbSet<ProductVariant> ProductVariants { get; set; } = null!;
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
@@ -43,14 +45,40 @@ namespace BlazorAppWebEcomm.Server.Models
             {
                 entity.ToTable("Product");
 
-                entity.Property(e => e.Price).HasColumnType("money");
-
                 entity.Property(e => e.Title).HasMaxLength(50);
 
                 entity.HasOne(d => d.Category)
                     .WithMany(p => p.Products)
                     .HasForeignKey(d => d.CategoryId)
                     .HasConstraintName("FK_Product_Category");
+            });
+
+            modelBuilder.Entity<ProductType>(entity =>
+            {
+                entity.ToTable("ProductType");
+
+                entity.Property(e => e.Name)
+                    .HasMaxLength(20)
+                    .IsUnicode(false);
+            });
+
+            modelBuilder.Entity<ProductVariant>(entity =>
+            {
+                entity.ToTable("ProductVariant");
+
+                entity.Property(e => e.OriginalPrice).HasColumnType("decimal(18, 2)");
+
+                entity.Property(e => e.Price).HasColumnType("decimal(18, 2)");
+
+                entity.HasOne(d => d.Product)
+                    .WithMany(p => p.ProductVariants)
+                    .HasForeignKey(d => d.ProductId)
+                    .HasConstraintName("FK_ProductVariant_Product");
+
+                entity.HasOne(d => d.ProductType)
+                    .WithMany(p => p.ProductVariants)
+                    .HasForeignKey(d => d.ProductTypeId)
+                    .HasConstraintName("FK_ProductVariant_ProductType");
             });
 
             OnModelCreatingPartial(modelBuilder);

@@ -12,9 +12,10 @@ namespace BlazorAppWebEcomm.Shared
         public string? Title { get; set; }
         public string? Description { get; set; }
         public string? ImageUrl { get; set; }
-        public decimal? Price { get; set; }
         public Category Category { get; set; }
         public int? CategoryId { get; set; }
+
+        public List<ProductVariant> Variants { get; set; } = new List<ProductVariant>();
 
     }
 }
