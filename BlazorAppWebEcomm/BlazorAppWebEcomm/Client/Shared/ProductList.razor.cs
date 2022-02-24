@@ -6,17 +6,20 @@ using System.Net.Http.Json;
 
 namespace BlazorAppWebEcomm.Client.Shared
 {
-    public partial class ProductList : ComponentBase
+    public partial class ProductList : ComponentBase,IDisposable
     {
-
         [Inject]
         public IProductService ProductService { get; set; }
 
-        protected override async Task OnInitializedAsync()
+        protected override void OnInitialized()
         {
-            await ProductService.GetProducts();
+            ProductService.ProductsChanged += StateHasChanged;
         }
        
-
+        public void Dispose()
+        {
+            ProductService.ProductsChanged-= StateHasChanged;
+        }
+        
     }
 }

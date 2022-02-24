@@ -28,6 +28,24 @@ namespace BlazorAppWebEcomm.Server.Services.ProductServices
             return response;
         }
 
+        public async Task<ServiceResponse<List<Models.Product>>> GetProductByCategoryAsync(string categoryUrl)
+        {
+            ServiceResponse<List<Models.Product>> responseProdcuts = new ServiceResponse<List<Models.Product>>();
+            try
+            {
+                responseProdcuts = new ServiceResponse<List<Models.Product>>()
+                {
+                    Data = await _eCommDataBaseContext.Products.Where(p => p.Category.Url.ToLower().Equals(categoryUrl.ToLower())).ToListAsync()
+                };
+            }
+            catch (Exception ex)
+            {
+                responseProdcuts.Success = false;
+                responseProdcuts.Message = ex.Message;
+            }
+            return responseProdcuts;
+        }
+
         public  async Task<ServiceResponse<List<Models.Product>>> GetProductsAsync()
         {
             ServiceResponse<List<Models.Product>> responseProdcuts = new ServiceResponse<List<Models.Product>>();

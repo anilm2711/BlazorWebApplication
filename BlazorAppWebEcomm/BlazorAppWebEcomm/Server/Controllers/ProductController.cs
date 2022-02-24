@@ -6,7 +6,7 @@ using Microsoft.EntityFrameworkCore;
 
 namespace BlazorAppWebEcomm.Server.Controllers
 {
-    [Route("api/[controller]")]
+    [Route("api/[controller]/[action]")]
     [ApiController]
     public class ProductController : ControllerBase
     {
@@ -30,6 +30,14 @@ namespace BlazorAppWebEcomm.Server.Controllers
         {
             ServiceResponse<Models.Product>? product = await _productService.GetProductAsync(productId);
             return Ok(product);
+        }
+
+        [HttpGet]
+        [Route("{categoryUrl}")]
+        public async Task<ActionResult<ServiceResponse<List<Models.Product>>>> GetProductsByCategory(string categoryUrl)
+        {
+            ServiceResponse<List<Models.Product>>? products = await _productService.GetProductByCategoryAsync(categoryUrl);
+            return Ok(products);
         }
     }
 }
