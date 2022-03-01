@@ -5,9 +5,9 @@ namespace BlazorAppWebEcomm.Server.Services.ProductServices
 {
     public class ProductService : IProductService
     {
-        private readonly ECommDatabaseContext _eCommDataBaseContext;
+        private readonly EcommDatabaseContext _eCommDataBaseContext;
 
-        public ProductService(ECommDatabaseContext eCommDataBaseContext)
+        public ProductService(EcommDatabaseContext eCommDataBaseContext)
         {
             this._eCommDataBaseContext = eCommDataBaseContext;
         }
@@ -118,6 +118,24 @@ namespace BlazorAppWebEcomm.Server.Services.ProductServices
             }
 
             return new ServiceResponse<List<string>> { Data = prodString };
+        }
+
+        public async Task<ServiceResponse<List<Models.Product>>> GetFeaturedProductsAsync()
+        {
+            ServiceResponse<List<Models.Product>> responseProdcuts = new ServiceResponse<List<Models.Product>>();
+            try
+            {
+                responseProdcuts = new ServiceResponse<List<Models.Product>>()
+                {
+                    Data = await _eCommDataBaseContext.Products.Include(e => e.ProductVariants).Where(p=>p.Featured==true).ToListAsync()
+                };
+            }
+            catch (Exception ex)
+            {
+                responseProdcuts.Success = false;
+                responseProdcuts.Message = ex.Message;
+            }
+            return responseProdcuts;
         }
     }
 }

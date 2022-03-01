@@ -30,9 +30,9 @@ namespace BlazorAppWebEcomm.Client.Shared
             }
             else if (variants.Count == 1)
             {
-                return $"${variants[0].Price}";
+                return $"${variants.FirstOrDefault().Price}";
             }
-            decimal minprice = variants.Min(p => p.Price);
+            decimal ?minprice = variants.Min(p => p.Price);
             return $"starting at ${minprice}";
         }
         

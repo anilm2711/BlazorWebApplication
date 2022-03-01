@@ -6,7 +6,7 @@ using Microsoft.EntityFrameworkCore;
 
 namespace BlazorAppWebEcomm.Server.Controllers
 {
-    [Route("api/[controller]/[action]")]
+    //[Route("api/[controller]/[action]")]
     [ApiController]
     public class ProductController : ControllerBase
     {
@@ -18,6 +18,7 @@ namespace BlazorAppWebEcomm.Server.Controllers
         }
 
         [HttpGet]
+        [Route("api/Product/GetProducts")]
         public async Task<ActionResult<ServiceResponse<List<Models.Product>>>> GetProducts()
         {
             ServiceResponse<List<Models.Product>>? products = await _productService.GetProductsAsync();
@@ -25,7 +26,7 @@ namespace BlazorAppWebEcomm.Server.Controllers
         }
 
         [HttpGet]
-        [Route("{productId}")]
+        [Route("api/Product/GetProduct/{productId}")]
         public async Task<ActionResult<ServiceResponse<Models.Product>>> GetProduct(int productId)
         {
             ServiceResponse<Models.Product>? product = await _productService.GetProductAsync(productId);
@@ -33,7 +34,7 @@ namespace BlazorAppWebEcomm.Server.Controllers
         }
 
         [HttpGet]
-        [Route("{categoryUrl}")]
+        [Route("api/Product/GetProductsByCategory/{categoryUrl}")]
         public async Task<ActionResult<ServiceResponse<List<Models.Product>>>> GetProductsByCategory(string categoryUrl)
         {
             ServiceResponse<List<Models.Product>>? products = await _productService.GetProductByCategoryAsync(categoryUrl);
@@ -41,7 +42,7 @@ namespace BlazorAppWebEcomm.Server.Controllers
         }
 
         [HttpGet]
-        [Route("{searchText}")]
+        [Route("api/Product/SearchProducts/{searchText}")]
         public async Task<ActionResult<ServiceResponse<List<Models.Product>>>> SearchProducts(string searchText)
         {
             ServiceResponse<List<Models.Product>>? products = await _productService.SearchProducts(searchText);
@@ -49,11 +50,20 @@ namespace BlazorAppWebEcomm.Server.Controllers
         }
 
         [HttpGet]
-        [Route("{searchText}")]
+        [Route("api/Product/GetProductSearchSuggestion/{searchText}")]
         public async Task<ActionResult<ServiceResponse<List<string>>>> GetProductSearchSuggestion(string searchText)
         {
             ServiceResponse<List<string>>? strSearchSuggestion = await _productService.GetProductSearchSuggestion(searchText);
             return Ok(strSearchSuggestion);
+        }
+
+
+        [HttpGet]
+        [Route("api/Product/GetFeaturedProductsAsync")]
+        public async Task<ActionResult<ServiceResponse<List<Models.Product>>>> GetFeaturedProductsAsync()
+        {
+            ServiceResponse<List<Models.Product>>? products = await _productService.GetFeaturedProductsAsync();
+            return Ok(products);
         }
     }
 }

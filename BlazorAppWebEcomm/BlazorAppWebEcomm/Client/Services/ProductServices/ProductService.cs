@@ -17,7 +17,7 @@ namespace BlazorAppWebEcomm.Client.Services.ProductServices
 
         public async Task GetProducts()
         {
-            var result = await _httpClient.GetFromJsonAsync<ServiceResponse<List<Product>>>("api/Product/GetProducts");
+            var result = await _httpClient.GetFromJsonAsync<ServiceResponse<List<Product>>>("api/Product/getFeaturedProductsAsync");
             if (result != null && result.Data != null)
                 Products = result.Data;
             ProductsChanged.Invoke();

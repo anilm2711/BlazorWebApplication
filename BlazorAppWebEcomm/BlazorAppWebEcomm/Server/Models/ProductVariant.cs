@@ -11,7 +11,6 @@ namespace BlazorAppWebEcomm.Server.Models
         public int? ProductTypeId { get; set; }
         public decimal? Price { get; set; }
         public decimal? OriginalPrice { get; set; }
-
         [JsonIgnore]
         public virtual Product? Product { get; set; }
         public virtual ProductType? ProductType { get; set; }

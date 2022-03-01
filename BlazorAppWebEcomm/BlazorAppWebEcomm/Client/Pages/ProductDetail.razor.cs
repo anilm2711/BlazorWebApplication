@@ -12,7 +12,7 @@ namespace BlazorAppWebEcomm.Client.Pages
         private Product Product { get; set; } = null;
         public string message { get; set; } = string.Empty;
 
-        private int currentTypeId { get; set; } = 1;
+        private int ?currentTypeId { get; set; } = 1;
 
         [Parameter]
         public int Id { get; set; }
@@ -30,7 +30,7 @@ namespace BlazorAppWebEcomm.Client.Pages
                 Product = response.Data;
                 if(Product.ProductVariants!=null && Product.ProductVariants.Count()>0)
                 {
-                    currentTypeId = Product.ProductVariants[0].ProductTypeId;
+                    currentTypeId = Product.ProductVariants.FirstOrDefault().ProductTypeId;
                 }
             }
         }
