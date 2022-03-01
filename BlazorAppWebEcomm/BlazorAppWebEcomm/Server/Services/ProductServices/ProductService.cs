@@ -65,5 +65,59 @@ namespace BlazorAppWebEcomm.Server.Services.ProductServices
             }
             return responseProdcuts;
         }
+
+        public async Task<ServiceResponse<List<Models.Product>>> SearchProducts(string searchText)
+        {
+            ServiceResponse<List<Models.Product>> responseProdcuts = new ServiceResponse<List<Models.Product>>();
+            try
+            {
+                responseProdcuts = new ServiceResponse<List<Models.Product>>()
+                {
+                    Data = await FindProduct(searchText)
+                };
+            }
+            catch (Exception ex)
+            {
+                responseProdcuts.Success = false;
+                responseProdcuts.Message = ex.Message;
+            }
+            return responseProdcuts;
+
+           
+        }
+
+        public async Task<List<Models.Product>> FindProduct(string searchText)
+        {
+            return await _eCommDataBaseContext.Products.Where(x => x.Description.ToLower().Contains(searchText.ToLower())
+                                || x.Title.ToLower().Contains(searchText.ToLower())).Include(e => e.ProductVariants).ToListAsync();
+        }
+
+        public async Task<ServiceResponse<List<string>>> GetProductSearchSuggestion(string searchText)
+        {
+            var product =await FindProduct(searchText);
+            List<string> prodString = new List<string>();
+            foreach(var item in product)
+            {
+                if(item.Title.Contains(searchText,StringComparison.OrdinalIgnoreCase))
+                {
+                    prodString.Add(item.Title);
+                }
+
+                if(item.Description!=null)
+                {
+                    var punctuation = item.Description.Where(char.IsPunctuation).Distinct().ToArray();
+                    var words = item.Description.Split().Select(s => s.Trim(punctuation));
+                    foreach(var wrd in words)
+                    {
+                        if(wrd.Contains(searchText,StringComparison.OrdinalIgnoreCase) && prodString.Contains(wrd)==false)
+                        {
+                            prodString.Add(wrd);
+                        }
+                    }
+                }
+            }
+
+            return new ServiceResponse<List<string>> { Data = prodString };
+        }
     }
 }

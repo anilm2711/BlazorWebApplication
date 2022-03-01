@@ -39,5 +39,21 @@ namespace BlazorAppWebEcomm.Server.Controllers
             ServiceResponse<List<Models.Product>>? products = await _productService.GetProductByCategoryAsync(categoryUrl);
             return Ok(products);
         }
+
+        [HttpGet]
+        [Route("{searchText}")]
+        public async Task<ActionResult<ServiceResponse<List<Models.Product>>>> SearchProducts(string searchText)
+        {
+            ServiceResponse<List<Models.Product>>? products = await _productService.SearchProducts(searchText);
+            return Ok(products);
+        }
+
+        [HttpGet]
+        [Route("{searchText}")]
+        public async Task<ActionResult<ServiceResponse<List<string>>>> GetProductSearchSuggestion(string searchText)
+        {
+            ServiceResponse<List<string>>? strSearchSuggestion = await _productService.GetProductSearchSuggestion(searchText);
+            return Ok(strSearchSuggestion);
+        }
     }
 }
