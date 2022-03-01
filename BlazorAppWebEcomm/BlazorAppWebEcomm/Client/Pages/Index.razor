@@ -1,4 +1,5 @@
 ﻿@page "/"
+@page "/search/{searchText}"
 @page "/{categoryUrl}"
 @inject IProductService IProductService;
 <PageTitle>E-Shop</PageTitle>
@@ -9,17 +10,22 @@
     [Parameter]
     public string?categoryUrl { get; set; }=null;
 
-
+    [Parameter]
+    public string?SearchText { get; set; }=null;
 
     protected override async Task OnParametersSetAsync()
     {
-        if(categoryUrl !=null)
+        if (categoryUrl != null)
         {
-           await  IProductService.GetProductByCategory(categoryUrl);
+            await IProductService.GetProductByCategory(categoryUrl);
+        }
+        else if (string.IsNullOrEmpty(SearchText) == false)
+        {
+            await IProductService.SearchProducts(SearchText);
         }
         else
         {
-          await  IProductService.GetProducts();
+            await IProductService.GetProducts();
         }
     }
 
