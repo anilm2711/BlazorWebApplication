@@ -3,15 +3,22 @@
 @page "/{categoryUrl}"
 @inject IProductService IProductService;
 <PageTitle>E-Shop</PageTitle>
+@if (SearchText == null && categoryUrl == null)
+{
+    <FeaturedProduct></FeaturedProduct>
+}
+else
+{
+    <ProductList></ProductList>
+}
 
-<ProductList></ProductList>
 
-@code{
+@code {
     [Parameter]
-    public string?categoryUrl { get; set; }=null;
+    public string? categoryUrl { get; set; } = null;
 
     [Parameter]
-    public string?SearchText { get; set; }=null;
+    public string? SearchText { get; set; } = null;
 
     protected override async Task OnParametersSetAsync()
     {

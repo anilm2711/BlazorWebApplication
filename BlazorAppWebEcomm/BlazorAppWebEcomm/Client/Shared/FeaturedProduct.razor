@@ -1,0 +1,29 @@
+﻿<centre><h2>Top Products of Today</h2> </centre>
+@if (_productService.Products == null || _productService.Products.Count() == 0)
+{
+    <span>@_productService.Message </span>
+}
+else
+{
+    <div class="container">
+        @foreach (var item in _productService.Products)
+        {
+            @if (item.Featured != null && item.Featured.Value == true)
+            {
+                <div class="featured-product">
+                    <div>
+                        <a href="product/@item.ProductId">
+                            <img src="@item.ImageUrl">
+                        </a>
+                    </div>
+                    <h6> <a href="product/@item.ProductId">@item.Title</a> </h6>
+                    @if (item.ProductVariants != null && item.ProductVariants.Count() > 0)
+                    {
+                        <h5 class="price">$@item.ProductVariants[0].Price</h5>
+                    }
+                </div>
+            }
+        }
+
+    </div>
+}
