@@ -15,9 +15,9 @@ namespace BlazorAppWebEcomm.Server.Services.ProductServices
         public async Task<ServiceResponse<Models.Product>> GetProductAsync(int productId)
         {
             var response = new ServiceResponse<Models.Product>();
-            var product =await _eCommDataBaseContext.Products
-                .Include(e=>e.ProductVariants)
-                .ThenInclude(x=>x.ProductType).FirstOrDefaultAsync(p => p.ProductId == productId);
+            var product = await _eCommDataBaseContext.Products
+                .Include(e => e.ProductVariants)
+                .ThenInclude(x => x.ProductType).FirstOrDefaultAsync(p => p.ProductId == productId);
             if (product == null)
             {
                 response.Success = false;
@@ -37,7 +37,7 @@ namespace BlazorAppWebEcomm.Server.Services.ProductServices
             {
                 responseProdcuts = new ServiceResponse<List<Models.Product>>()
                 {
-                    Data = await _eCommDataBaseContext.Products.Include(x=>x.ProductVariants).Where(p => p.Category.Url.ToLower().Equals(categoryUrl.ToLower())).ToListAsync()
+                    Data = await _eCommDataBaseContext.Products.Include(x => x.ProductVariants).Where(p => p.Category.Url.ToLower().Equals(categoryUrl.ToLower())).ToListAsync()
                 };
             }
             catch (Exception ex)
@@ -48,14 +48,14 @@ namespace BlazorAppWebEcomm.Server.Services.ProductServices
             return responseProdcuts;
         }
 
-        public  async Task<ServiceResponse<List<Models.Product>>> GetProductsAsync()
+        public async Task<ServiceResponse<List<Models.Product>>> GetProductsAsync()
         {
             ServiceResponse<List<Models.Product>> responseProdcuts = new ServiceResponse<List<Models.Product>>();
             try
             {
                 responseProdcuts = new ServiceResponse<List<Models.Product>>()
                 {
-                    Data = await _eCommDataBaseContext.Products.Include(e=>e.ProductVariants).ToListAsync()
+                    Data = await _eCommDataBaseContext.Products.Include(e => e.ProductVariants).ToListAsync()
                 };
             }
             catch (Exception ex)
@@ -66,25 +66,30 @@ namespace BlazorAppWebEcomm.Server.Services.ProductServices
             return responseProdcuts;
         }
 
-        public async Task<ServiceResponse<List<Models.Product>>> SearchProducts(string searchText)
+        public async Task<ServiceResponse<ProductSearchResult<Models.Product>>> SearchProducts(string searchText, int page)
         {
-            ServiceResponse<List<Models.Product>> responseProdcuts = new ServiceResponse<List<Models.Product>>();
-            try
-            {
-                responseProdcuts = new ServiceResponse<List<Models.Product>>()
-                {
-                    Data = await FindProduct(searchText)
-                };
-            }
-            catch (Exception ex)
-            {
-                responseProdcuts.Success = false;
-                responseProdcuts.Message = ex.Message;
-            }
-            return responseProdcuts;
+            int pageResult = 2;
 
-           
+            decimal r = (await FindProduct(searchText)).Count()/pageResult;
+            int pageCount =Convert.ToInt32(Math.Ceiling(r));
+            List<Models.Product>? products = await _eCommDataBaseContext.Products.Where(x => x.Description.ToLower().Contains(searchText.ToLower())
+                                  || x.Title.ToLower().Contains(searchText.ToLower())).Include(e => e.ProductVariants)
+                                 .Skip((page - 1) * pageResult)
+                                 .Take(pageResult)
+                                 .ToListAsync();
+            var response = new ServiceResponse<ProductSearchResult<Models.Product>>()
+            {
+                Data = new ProductSearchResult<Models.Product>()
+                {
+                    Products = products,
+                    CurrentPage = page,
+                    Pages = pageCount
+                }
+            };
+            return response;
         }
+            
+
 
         public async Task<List<Models.Product>> FindProduct(string searchText)
         {

@@ -42,10 +42,10 @@ namespace BlazorAppWebEcomm.Server.Controllers
         }
 
         [HttpGet]
-        [Route("api/Product/SearchProducts/{searchText}")]
-        public async Task<ActionResult<ServiceResponse<List<Models.Product>>>> SearchProducts(string searchText)
+        [Route("api/Product/SearchProducts/{searchText}/{page}")]
+        public async Task<ActionResult<ServiceResponse<ProductSearchResult<Models.Product>>>> SearchProducts(string searchText, int page = 1)
         {
-            ServiceResponse<List<Models.Product>>? products = await _productService.SearchProducts(searchText);
+            ServiceResponse<ProductSearchResult<Models.Product>>? products = await _productService.SearchProducts(searchText, page);
             return Ok(products);
         }
 
