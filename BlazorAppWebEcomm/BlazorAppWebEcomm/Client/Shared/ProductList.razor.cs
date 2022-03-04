@@ -11,6 +11,7 @@ namespace BlazorAppWebEcomm.Client.Shared
         [Inject]
         public IProductService ProductService { get; set; }
 
+
         protected override void OnInitialized()
         {
             ProductService.ProductsChanged += StateHasChanged;

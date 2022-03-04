@@ -14,6 +14,9 @@ namespace BlazorAppWebEcomm.Client.Services.ProductServices
         }
         public List<Product> Products { get; set; }
         public string Message { get; set; }
+        public int CurrentPage { get; set; } = 1;
+        public int PageCount { get; set; } = 0;
+        public string LastSearchText { get; set; } = string.Empty;
 
         public async Task GetProducts()
         {
@@ -33,15 +36,30 @@ namespace BlazorAppWebEcomm.Client.Services.ProductServices
         {
             var result = await _httpClient.GetFromJsonAsync<ServiceResponse<List<Product>>>($"api/Product/GetProductsByCategory/{categoryUrl}");
             if (result != null && result.Data != null)
+            {
                 Products = result.Data;
+            }
+            if (Products.Count == 0)
+            {
+                Message = "No Products found";
+            }
             ProductsChanged?.Invoke();
         }
 
-        public async Task SearchProducts(string searchText)
+        public async Task SearchProducts(string searchText, int page)
         {
-            var result = await _httpClient.GetFromJsonAsync<ServiceResponse<List<Product>>>($"api/Product/SearchProducts/{searchText}");
+            LastSearchText = searchText;
+            var result = await _httpClient.GetFromJsonAsync<ServiceResponse<ProductSearchResult<Product>>>($"api/Product/SearchProducts/{searchText}/{page}");
+            CurrentPage = 1;
+            PageCount = 0;
             if (result != null && result.Data != null)
-                Products = result.Data;
+            {
+                Products = result.Data.Products;
+                CurrentPage = result.Data.CurrentPage;
+                PageCount=result.Data.Pages;
+            }
+
+
             if (Products.Count == 0)
             {
                 Message = "No Products found";
