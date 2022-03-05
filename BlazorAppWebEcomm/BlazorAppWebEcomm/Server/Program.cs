@@ -3,6 +3,7 @@ global using BlazorAppWebEcomm.Server.Models;
 global using Microsoft.EntityFrameworkCore;
 using BlazorAppWebEcomm.Server.Services.ProductServices;
 using BlazorAppWebEcomm.Server.Services.CategoryServices;
+using BlazorAppWebEcomm.Server.Services.CartServices;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -16,6 +17,7 @@ builder.Services.AddDbContext<EcommDatabaseContext>(options =>
 });
 builder.Services.AddScoped<IProductService, ProductService>();
 builder.Services.AddScoped<ICategoryService, CategoryService>();
+builder.Services.AddScoped<ICartService, CartService>();
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.
