@@ -36,5 +36,15 @@ namespace BlazorAppWebEcomm.Client.Pages
                 cartProductResponses = await cartService.GetCartProducts();
             }
         }
+
+        public async Task UpdateQuantity(ChangeEventArgs e,CartProductResponse cartProductResponse)
+        {
+            cartProductResponse.Quantity = int.Parse(e.Value.ToString());
+            if(cartProductResponse.Quantity<1)
+            {
+                cartProductResponse.Quantity = 1;
+            }
+            await cartService.UpdateProductQuantity(cartProductResponse);
+        }
     }
 }

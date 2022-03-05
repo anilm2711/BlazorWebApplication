@@ -9,5 +9,7 @@
 
         Task<List<CartProductResponse>> GetCartProducts();
         Task RemoveProductFromCart(int productId, int productTypeid);
+
+        Task UpdateProductQuantity(CartProductResponse cartProductResponse);
     }
 }

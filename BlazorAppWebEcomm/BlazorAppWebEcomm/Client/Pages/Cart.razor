@@ -19,17 +19,22 @@ else
                 <div class="name">
                     <h5><a href="/product/@item.ProductId">@item.Title</a></h5>
                     <span>@item.ProductType</span>
+                    <input type="number" class="form-control input-quantity" value="@item.Quantity" 
+                    @onchange="@((ChangeEventArgs e) =>UpdateQuantity(e,item))"
+                    min="1"
+                    />
+                    <br>
                     <button class="btn-delete" @onclick=@(()=>RemoveProductFromCart(@item.ProductId, @item.ProductTypeId))>
                         Remove
                     </button>
                 </div>
                 <div class="cart-product-price">
-                    $@item.Price
+                    $@(item.Price*item.Quantity)
                 </div>
             </div>
         }
         <div class="cart-product-price">
-            Total:(@cartProductResponses.Count):$@cartProductResponses.Sum(p=>p.Price)
+            Total:(@cartProductResponses.Count):$@cartProductResponses.Sum(p=>p.Price *p.Quantity)
         </div>
     </div>
 }
