@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Components;
+﻿using BlazorAppWebEcomm.Client.Services.CartService;
+using Microsoft.AspNetCore.Components;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -7,6 +8,9 @@ namespace BlazorAppWebEcomm.Client.Pages
 {
     public partial class ProductDetail : ComponentBase
     {
+        [Inject]
+        public ICartService cartService { get; set; }
+
         [Inject]
         public IProductService  ProductService { get; set; }
         private Product Product { get; set; } = null;
@@ -38,6 +42,17 @@ namespace BlazorAppWebEcomm.Client.Pages
         {
             var pVariant = Product.ProductVariants.FirstOrDefault(p => p.ProductTypeId == currentTypeId);
             return pVariant;
+        }
+
+        internal async Task AddToCart()
+        {
+            var productVariant = GetSelectedProductVariant();
+            var cartItem = new CartItem
+            {
+                ProductId = productVariant.ProductId,
+                ProductTypeId = productVariant.ProductTypeId
+            };
+            await cartService.AddToCart(cartItem);
         }
     }
 }
