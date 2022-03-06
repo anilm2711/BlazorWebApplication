@@ -20,6 +20,7 @@ namespace BlazorAppWebEcomm.Server.Models
         public virtual DbSet<Product> Products { get; set; } = null!;
         public virtual DbSet<ProductType> ProductTypes { get; set; } = null!;
         public virtual DbSet<ProductVariant> ProductVariants { get; set; } = null!;
+        public virtual DbSet<User> Users { get; set; } = null!;
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
@@ -79,6 +80,15 @@ namespace BlazorAppWebEcomm.Server.Models
                     .WithMany(p => p.ProductVariants)
                     .HasForeignKey(d => d.ProductTypeId)
                     .HasConstraintName("FK_ProductVariant_ProductType");
+            });
+
+            modelBuilder.Entity<User>(entity =>
+            {
+                entity.ToTable("User");
+
+                entity.Property(e => e.DateCreated).HasColumnType("datetime");
+
+                entity.Property(e => e.Email).HasMaxLength(50);
             });
 
             OnModelCreatingPartial(modelBuilder);
