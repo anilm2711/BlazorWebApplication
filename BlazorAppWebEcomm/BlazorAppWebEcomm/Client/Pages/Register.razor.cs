@@ -7,11 +7,26 @@ namespace BlazorAppWebEcomm.Client.Pages
 {
     public partial class Register : ComponentBase
     {
+        [Inject]
+        IAuthService authService { get; set; }
         public UserRegister user { get; set; } = new UserRegister();
 
-        void HandleRegistration()
+        string message = string.Empty;
+        string messageCssClass = string.Empty;
+
+        private async Task HandleRegistration()
         {
-            Console.WriteLine("register");
+            var result = await authService.Register(user);
+            message = result.Message;
+            if (result.Success)
+            {
+                messageCssClass = "text-success";
+            }
+            else
+            {
+                messageCssClass = "text-danger";
+            }
+
         }
     }
 }
