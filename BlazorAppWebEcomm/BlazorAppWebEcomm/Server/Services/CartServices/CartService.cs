@@ -9,7 +9,7 @@
             this.ecommDatabaseContext = ecommDatabaseContext;
         }
 
-        public async Task<ServiceResponse<List<CartProductResponse>>> GetCartProducts(List<CartItem> cartItems)
+        public async Task<ServiceResponse<List<CartProductResponse>>> GetCartProducts(List<Models.CartItem> cartItems)
         {
             var result = new ServiceResponse<List<CartProductResponse>>()
             {

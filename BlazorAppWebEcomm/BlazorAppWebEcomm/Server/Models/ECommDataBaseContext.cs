@@ -16,6 +16,7 @@ namespace BlazorAppWebEcomm.Server.Models
         {
         }
 
+        public virtual DbSet<CartItem> CartItems { get; set; } = null!;
         public virtual DbSet<Category> Categories { get; set; } = null!;
         public virtual DbSet<Product> Products { get; set; } = null!;
         public virtual DbSet<ProductType> ProductTypes { get; set; } = null!;
@@ -33,6 +34,13 @@ namespace BlazorAppWebEcomm.Server.Models
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
+            modelBuilder.Entity<CartItem>(entity =>
+            {
+                entity.HasKey(e => new { e.UserId, e.ProductId, e.ProductTypeId });
+
+                entity.ToTable("CartItem");
+            });
+
             modelBuilder.Entity<Category>(entity =>
             {
                 entity.ToTable("Category");

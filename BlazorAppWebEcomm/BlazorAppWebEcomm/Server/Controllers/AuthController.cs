@@ -1,5 +1,7 @@
-﻿using Microsoft.AspNetCore.Http;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using System.Security.Claims;
 
 namespace BlazorAppWebEcomm.Server.Controllers
 {
@@ -40,5 +42,17 @@ namespace BlazorAppWebEcomm.Server.Controllers
             }
             return Ok(response);
         }
+        [HttpPost("changepassword"),Authorize]
+        public async Task<ActionResult<ServiceResponse<bool>>> ChangePassword([FromBody] string newPassword)
+        {
+            var userId =  User.FindFirstValue(ClaimTypes.NameIdentifier);
+            var response =await authService.ChangePassword(int.Parse(userId), newPassword);
+            if(response.Success==false)
+            {
+                return BadRequest(response);
+            }
+            return Ok(response);
+        }
+
     }
 }

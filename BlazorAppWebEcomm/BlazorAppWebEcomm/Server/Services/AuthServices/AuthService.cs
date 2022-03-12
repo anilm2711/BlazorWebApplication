@@ -110,5 +110,27 @@ namespace BlazorAppWebEcomm.Server.Services.AuthServices
             return jwt;
 
         }
+
+        public async Task<ServiceResponse<bool>> ChangePassword(int userId, string newPaswword)
+        {
+            var user =await context.Users.FindAsync(userId);
+            if(user==null)
+            {
+                var response = new ServiceResponse<bool>()
+                {
+                    Success = false,
+                    Message = "User not found."
+                };
+            }
+            CreatePasswordHash(newPaswword, out byte[] passwordhash, out byte[] passwordSalt);
+            user.PasswordHash = passwordhash;
+            user.PasswordSalt = passwordSalt;
+           await  context.SaveChangesAsync();
+            return new ServiceResponse<bool>()
+            {
+                Data = true, 
+                Message = "Password has been changed successfully"
+            };
+        }
     }
 }

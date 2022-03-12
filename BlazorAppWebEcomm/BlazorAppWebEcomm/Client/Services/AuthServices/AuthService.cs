@@ -19,5 +19,11 @@
            var result=await httpClient.PostAsJsonAsync("api/Auth/login",userLogin);
             return await result.Content.ReadFromJsonAsync<ServiceResponse<string>>();
         }
+
+        public async Task<ServiceResponse<bool>> ChangePassword(UserChangePassword request)
+        {
+            var result = await httpClient.PostAsJsonAsync("api/Auth/changepassword", request.Password);
+            return  await result.Content.ReadFromJsonAsync<ServiceResponse<bool>>();
+        }
     }
 }

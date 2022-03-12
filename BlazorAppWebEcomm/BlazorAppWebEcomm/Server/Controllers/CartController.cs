@@ -16,7 +16,7 @@ namespace BlazorAppWebEcomm.Server.Controllers
         }
 
         [HttpPost("products")]
-        public async Task<ActionResult<ServiceResponse<List<CartProductResponse>>>> GetCartProducts(List<CartItem> cartItems)
+        public async Task<ActionResult<ServiceResponse<List<CartProductResponse>>>> GetCartProducts(List<Models.CartItem> cartItems)
         {
             var result=await cartService.GetCartProducts(cartItems);
             return Ok(result);
