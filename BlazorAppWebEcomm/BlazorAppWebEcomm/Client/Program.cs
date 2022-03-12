@@ -8,6 +8,7 @@ global using BlazorAppWebEcomm.Client.Services.CategoryServices;
 global using Blazored.LocalStorage;
 global using BlazorAppWebEcomm.Client.Services.CartService;
 global using BlazorAppWebEcomm.Client.Services.AuthServices;
+global using Microsoft.AspNetCore.Components.Authorization;
 
 var builder = WebAssemblyHostBuilder.CreateDefault(args);
 builder.RootComponents.Add<App>("#app");

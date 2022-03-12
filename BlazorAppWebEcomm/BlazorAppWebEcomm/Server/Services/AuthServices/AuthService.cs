@@ -1,14 +1,19 @@
-﻿using System.Security.Cryptography;
+﻿using Microsoft.IdentityModel.Tokens;
+using System.IdentityModel.Tokens.Jwt;
+using System.Security.Claims;
+using System.Security.Cryptography;
 
 namespace BlazorAppWebEcomm.Server.Services.AuthServices
 {
     public class AuthService : IAuthService
     {
         private readonly EcommDatabaseContext context;
+        private readonly IConfiguration configuration;
 
-        public AuthService(EcommDatabaseContext context)
+        public AuthService(EcommDatabaseContext context,IConfiguration configuration)
         {
             this.context = context;
+            this.configuration = configuration;
         }
 
         public async Task<ServiceResponse<string>> Login(string email, string password)
@@ -27,19 +32,10 @@ namespace BlazorAppWebEcomm.Server.Services.AuthServices
             }
             else
             {
-                response.Data = "token";
+                response.Data =CreateToken(user);
             }
             
             return response;
-        }
-
-        private bool VerifyPasswordHash(string password, byte[] passwordhash, byte[] passwordsalt)
-        {
-            using (var hmac = new HMACSHA512(passwordsalt))
-            {
-                var computeHash = hmac.ComputeHash(System.Text.Encoding.UTF8.GetBytes(password));
-                return computeHash.SequenceEqual(passwordhash);
-            }
         }
 
         public async Task<ServiceResponse<int>> Register(User user, string password)
@@ -84,6 +80,35 @@ namespace BlazorAppWebEcomm.Server.Services.AuthServices
                 passwordsalt = hmac.Key;
                 passwordhash = hmac.ComputeHash(System.Text.Encoding.UTF8.GetBytes(password));
             }
+        }
+
+
+        private bool VerifyPasswordHash(string password, byte[] passwordhash, byte[] passwordsalt)
+        {
+            using (var hmac = new HMACSHA512(passwordsalt))
+            {
+                var computeHash = hmac.ComputeHash(System.Text.Encoding.UTF8.GetBytes(password));
+                return computeHash.SequenceEqual(passwordhash);
+            }
+        }
+
+        private string  CreateToken(User user)
+        {
+            List<Claim> claims = new List<Claim>
+            {
+                new Claim(ClaimTypes.NameIdentifier,user.Id.ToString()),
+                new Claim(ClaimTypes.Name,user.Email)
+
+            };
+            var key = new SymmetricSecurityKey(System.Text.Encoding.UTF8.GetBytes(configuration.GetSection("AppSettings:Token").Value));
+            var creds = new SigningCredentials(key, SecurityAlgorithms.HmacSha512Signature);
+            var token=new JwtSecurityToken(
+                claims:claims,
+                expires: DateTime.Now.AddDays(1),
+                signingCredentials: creds);
+            var jwt = new JwtSecurityTokenHandler().WriteToken(token);
+            return jwt;
+
         }
     }
 }

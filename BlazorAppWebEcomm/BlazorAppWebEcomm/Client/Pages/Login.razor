@@ -4,7 +4,7 @@
 <EditForm Model="user" OnValidSubmit="Handlelogin">
     <DataAnnotationsValidator></DataAnnotationsValidator>
     <div class="mb-3">
-        <label for="email" >Email</label>
+        <label for="email">Email</label>
         <InputText id="email" @bind-Value="user.Email" class="form-control"></InputText>
         <ValidationMessage For="@(()=>user.Email)"></ValidationMessage>
     </div>
@@ -14,7 +14,8 @@
         <ValidationMessage For="@(()=>user.Password)"></ValidationMessage>
     </div>
     <button type="submit" class="btn btn-primary">Login</button>
-    <div class="@messageCssClass">
-        <span>@message</span>
-    </div>
+
 </EditForm>
+<div class="@messageCssClass">
+    <span>@message</span>
+</div>

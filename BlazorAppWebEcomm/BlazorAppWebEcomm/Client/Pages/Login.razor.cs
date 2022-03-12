@@ -9,23 +9,31 @@ namespace BlazorAppWebEcomm.Client.Pages
     {
         [Inject]
         IAuthService authService { get; set; }
-        public UserRegister user { get; set; } = new UserRegister();
+
+        [Inject]
+        ILocalStorageService localStorageService { get; set; }
+        [Inject]
+        NavigationManager navigationManager { get; set; }
+
+        private UserLogin user = new UserLogin();
 
         string message = string.Empty;
         string messageCssClass = string.Empty;
         private async Task Handlelogin()
         {
-            Console.WriteLine("Login ");
-            //var result = await authService.Register(user);
-            //message = result.Message;
-            //if (result.Success)
-            //{
-            //    messageCssClass = "text-success";
-            //}
-            //else
-            //{
-            //    messageCssClass = "text-danger";
-            //}
+            var result = await authService.Login(user);
+            message = result.Message;
+            if (result.Success)
+            {
+                message = string.Empty;
+                messageCssClass = "text-success";
+                await localStorageService.SetItemAsStringAsync("authToken", result.Data);
+                navigationManager.NavigateTo("");
+            }
+            else
+            {
+                messageCssClass = "text-danger";
+            }
 
         }
     }

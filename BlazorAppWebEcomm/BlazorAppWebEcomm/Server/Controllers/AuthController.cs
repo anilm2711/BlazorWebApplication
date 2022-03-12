@@ -31,9 +31,9 @@ namespace BlazorAppWebEcomm.Server.Controllers
         }
 
         [HttpPost("login")]
-        public async Task<ActionResult<ServiceResponse<string>>> Login(string email,string password)
+        public async Task<ActionResult<ServiceResponse<string>>> Login(UserLogin login)
         {
-            var response =await authService.Login(email, password);
+            var response =await authService.Login(login.Email, login.Password);
             if(!response.Success)
             {
                 return BadRequest(response);

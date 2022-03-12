@@ -13,5 +13,11 @@
             var result =await httpClient.PostAsJsonAsync("api/Auth/register", request);
             return await result.Content.ReadFromJsonAsync<ServiceResponse<int>>();
         }
+
+        public async Task<ServiceResponse<string>> Login(UserLogin userLogin)
+        {
+           var result=await httpClient.PostAsJsonAsync("api/Auth/login",userLogin);
+            return await result.Content.ReadFromJsonAsync<ServiceResponse<string>>();
+        }
     }
 }
