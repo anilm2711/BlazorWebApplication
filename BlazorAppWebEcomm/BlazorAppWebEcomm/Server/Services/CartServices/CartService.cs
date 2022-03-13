@@ -61,7 +61,12 @@ namespace BlazorAppWebEcomm.Server.Services.CartServices
             cartItems.ForEach(p => p.UserId =GetUserId());
             ecommDatabaseContext.CartItems.AddRange(cartItems);
             await ecommDatabaseContext.SaveChangesAsync();
-            return await GetCartProducts(await ecommDatabaseContext.CartItems.Where(p => p.UserId == GetUserId()).ToListAsync());
+            return await GetDbCartProducts();
+        }
+
+        public async Task<ServiceResponse<List<CartProductResponse>>> GetDbCartProducts()
+        {
+            return await GetCartProducts(ecommDatabaseContext.CartItems.Where(p => p.UserId == GetUserId()).ToList());
         }
     }
 }

@@ -26,15 +26,14 @@ namespace BlazorAppWebEcomm.Client.Pages
 
         private async Task LoadCart()
         {
-            if ((await cartService.GetCartItems()).Count() == 0)
+            await cartService.GetCartItemsCount();
+            cartProductResponses = await cartService.GetCartProducts();
+            if (cartProductResponses == null || cartProductResponses.Count == 0)
             {
                 message = "Your cart is empty.";
                 cartProductResponses = new List<CartProductResponse>();
             }
-            else
-            {
-                cartProductResponses = await cartService.GetCartProducts();
-            }
+
         }
 
         public async Task UpdateQuantity(ChangeEventArgs e,CartProductResponse cartProductResponse)
