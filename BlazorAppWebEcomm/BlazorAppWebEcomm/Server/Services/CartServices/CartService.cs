@@ -1,12 +1,29 @@
-﻿namespace BlazorAppWebEcomm.Server.Services.CartServices
+﻿using System.Security.Claims;
+
+namespace BlazorAppWebEcomm.Server.Services.CartServices
 {
     public class CartService : ICartService
     {
         private readonly EcommDatabaseContext ecommDatabaseContext;
+        private readonly IHttpContextAccessor httpContextAccessor;
 
-        public CartService(EcommDatabaseContext ecommDatabaseContext)
+        public CartService(EcommDatabaseContext ecommDatabaseContext,IHttpContextAccessor httpContextAccessor)
         {
             this.ecommDatabaseContext = ecommDatabaseContext;
+            this.httpContextAccessor = httpContextAccessor;
+        }
+
+        public async Task<ServiceResponse<int>> GetCartItemsCount()
+        {
+            int count = (await ecommDatabaseContext.CartItems.Where(p => p.UserId == GetUserId()).ToListAsync()).Count;
+            return new ServiceResponse<int>
+            {
+                Data = count,
+            };
+        }
+        public int GetUserId()
+        {
+            return int.Parse(httpContextAccessor.HttpContext.User.FindFirstValue(ClaimTypes.NameIdentifier));
         }
 
         public async Task<ServiceResponse<List<CartProductResponse>>> GetCartProducts(List<Models.CartItem> cartItems)
@@ -39,5 +56,12 @@
             return result;
         }
 
+        public async Task<ServiceResponse<List<CartProductResponse>>> StoreCartItems(List<Models.CartItem> cartItems)
+        {
+            cartItems.ForEach(p => p.UserId =GetUserId());
+            ecommDatabaseContext.CartItems.AddRange(cartItems);
+            await ecommDatabaseContext.SaveChangesAsync();
+            return await GetCartProducts(await ecommDatabaseContext.CartItems.Where(p => p.UserId == GetUserId()).ToListAsync());
+        }
     }
 }

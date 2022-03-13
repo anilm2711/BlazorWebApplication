@@ -17,6 +17,9 @@ namespace BlazorAppWebEcomm.Client.Shared
         private bool showUserMenu = false;
 
         private string UserMenuCssClass => showUserMenu ? "show-menu" : null;
+
+        [Inject]
+        ICartService cartService { get; set; }
         private void ToggleUserMenu()
         {
             showUserMenu = !showUserMenu;
@@ -31,6 +34,7 @@ namespace BlazorAppWebEcomm.Client.Shared
         private async Task Logout()
         {
             await localStorageService.RemoveItemAsync("authToken");
+            await cartService.GetCartItemsCount();
             await AuthenticationStateProvider.GetAuthenticationStateAsync();
             NavigationManager.NavigateTo("");
         }

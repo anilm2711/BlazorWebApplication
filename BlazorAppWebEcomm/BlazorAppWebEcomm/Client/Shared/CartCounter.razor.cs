@@ -17,8 +17,8 @@ namespace BlazorAppWebEcomm.Client.Shared
 
         protected int GetCartItemsCount()
         {
-            var cart = localStorageService.GetItem<List<CartItem>>("cart");
-            return cart != null ? cart.Count : 0;
+            var count = localStorageService.GetItem<int>("cartItemsCount");
+            return count;
         }
 
         protected override void OnInitialized()

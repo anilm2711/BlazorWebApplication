@@ -26,6 +26,9 @@ namespace BlazorAppWebEcomm.Client.Pages
         string message = string.Empty;
         string messageCssClass = string.Empty;
 
+        [Inject]
+        ICartService cartService { get; set; }
+
         protected override void OnInitialized()
         {
             var uri = navigationManager.ToAbsoluteUri(navigationManager.Uri);
@@ -44,6 +47,8 @@ namespace BlazorAppWebEcomm.Client.Pages
                 messageCssClass = "text-success";
                 await localStorageService.SetItemAsStringAsync("authToken", result.Data);
                 await AuthenticationStateProvider.GetAuthenticationStateAsync();
+                await cartService.GetCartItemsCount();
+                await cartService.StoreCartItems(true);
                 navigationManager.NavigateTo(returnUrl);
             }
             else
