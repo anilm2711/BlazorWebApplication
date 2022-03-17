@@ -67,19 +67,26 @@ namespace BlazorAppWebEcomm.Client.Services.CartService
             }
         }
 
-        public async Task RemoveProductFromCart(int productId, int productTypeid)
+        public async Task RemoveProductFromCart(int productId, int productTypeId)
         {
-            var cart = await localStorageService.GetItemAsync<List<CartItem>>("cart");
-            if (cart == null)
+            if (await IsUserAuthenticated())
             {
-                return;
+                await httpClient.DeleteAsync($"api/cart/{productId}/{productTypeId}");
             }
-            var cartItem = cart.Find(x => x.ProductId == productId && x.ProductTypeId == productTypeid);
-            if (cartItem != null)
+            else
             {
-                cart.Remove(cartItem);
-                await localStorageService.SetItemAsync("cart", cart);
-               await  GetCartItemsCount();
+                var cart = await localStorageService.GetItemAsync<List<CartItem>>("cart");
+                if (cart == null)
+                {
+                    return;
+                }
+                var cartItem = cart.Find(x => x.ProductId == productId && x.ProductTypeId == productTypeId);
+                if (cartItem != null)
+                {
+                    cart.Remove(cartItem);
+                    await localStorageService.SetItemAsync("cart", cart);
+
+                }
             }
         }
 
@@ -142,6 +149,5 @@ namespace BlazorAppWebEcomm.Client.Services.CartService
             }
             OnChange.Invoke();
         }
-
     }
 }

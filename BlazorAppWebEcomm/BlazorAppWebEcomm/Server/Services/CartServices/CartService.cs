@@ -112,5 +112,26 @@ namespace BlazorAppWebEcomm.Server.Services.CartServices
             await ecommDatabaseContext.SaveChangesAsync();
             return new ServiceResponse<bool>() { Data = true };
         }
+
+        public async Task<ServiceResponse<bool>> RemoveItemfromCart(int productId, int productTypeId)
+        {
+            var dbCartItem = await ecommDatabaseContext.CartItems.FirstOrDefaultAsync(p => p.ProductId == productId
+                                                     && p.ProductTypeId == productTypeId && p.UserId == GetUserId());
+            if (dbCartItem == null)
+            {
+                return new ServiceResponse<bool>()
+                {
+                    Data = false,
+                    Success = false,
+                    Message = "Cart Item does not exist",
+
+                };
+            }
+
+            ecommDatabaseContext.Remove(dbCartItem);
+            await ecommDatabaseContext.SaveChangesAsync();
+
+            return new ServiceResponse<bool>() { Data = true };
+        }
     }
 }

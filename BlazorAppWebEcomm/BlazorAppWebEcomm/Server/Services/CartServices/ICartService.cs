@@ -10,7 +10,6 @@
 
         Task<ServiceResponse<bool>> UpdateQuantity(Models.CartItem cartItem);
 
-
-
+        Task<ServiceResponse<bool>> RemoveItemfromCart(int productId, int productTypeId);
     }
 }
