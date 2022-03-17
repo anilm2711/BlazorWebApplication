@@ -42,5 +42,19 @@ namespace BlazorAppWebEcomm.Server.Controllers
             var result= await cartService.GetDbCartProducts();
             return Ok(result);
         }
+
+        [HttpPost("addtocart")]
+        public async Task<ActionResult<ServiceResponse<bool>>> AddToCart(Models.CartItem cartItem)
+        {
+            var result = await cartService.AddToCart(cartItem);
+            return Ok(result);
+        }
+
+        [HttpPut("updatequantity")]
+        public async Task<ActionResult<ServiceResponse<bool>>> UpdateQuantity(Models.CartItem cartItem)
+        {
+            var result = await cartService.UpdateQuantity(cartItem);
+            return Ok(result);
+        }
     }
 }

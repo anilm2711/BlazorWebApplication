@@ -46,7 +46,7 @@ namespace BlazorAppWebEcomm.Server.Services.CartServices
                     ProductId = product.ProductId,
                     Title = product.Title,
                     ImageUrl = product.ImageUrl,
-                    ProductTypeId = productVariant.ProductTypeId,
+                    ProductTypeId = productVariant.ProductTypeId.Value,
                     ProductType = productVariant.ProductType.Name,
                     Price = productVariant.Price,
                     Quantity = item.Quantity
@@ -67,6 +67,50 @@ namespace BlazorAppWebEcomm.Server.Services.CartServices
         public async Task<ServiceResponse<List<CartProductResponse>>> GetDbCartProducts()
         {
             return await GetCartProducts(ecommDatabaseContext.CartItems.Where(p => p.UserId == GetUserId()).ToList());
+        }
+
+        public async Task<ServiceResponse<bool>> AddToCart(Models.CartItem cartItem)
+        {
+            try
+            {
+                cartItem.UserId = GetUserId();
+                var sameItem = await ecommDatabaseContext.CartItems.FirstOrDefaultAsync(p => p.ProductId == cartItem.ProductId && p.ProductTypeId == cartItem.ProductTypeId
+                   && p.UserId == cartItem.UserId);
+                if (sameItem == null)
+                {
+                    ecommDatabaseContext.CartItems.Add(cartItem);
+                }
+                else
+                {
+                    sameItem.Quantity += cartItem.Quantity;
+                }
+                await ecommDatabaseContext.SaveChangesAsync();
+                return new ServiceResponse<bool>() { Data = true };
+            }
+            catch (Exception)
+            {
+
+                return new ServiceResponse<bool>() { Data = false };
+            }
+            
+        }
+
+        public async Task<ServiceResponse<bool>> UpdateQuantity(Models.CartItem cartItem)
+        {
+            var dbCartItem = await ecommDatabaseContext.CartItems.FirstOrDefaultAsync(p => p.ProductId == cartItem.ProductId && p.ProductTypeId == cartItem.ProductTypeId && p.UserId == GetUserId());
+            if(dbCartItem==null)
+            {
+                return new ServiceResponse<bool>()
+                {
+                    Data = false,
+                    Success = false,
+                    Message = "Cart Item does not exist",
+
+                };
+            }
+            dbCartItem.Quantity = cartItem.Quantity;
+            await ecommDatabaseContext.SaveChangesAsync();
+            return new ServiceResponse<bool>() { Data = true };
         }
     }
 }
