@@ -18,6 +18,8 @@ namespace BlazorAppWebEcomm.Server.Models
 
         public virtual DbSet<CartItem> CartItems { get; set; } = null!;
         public virtual DbSet<Category> Categories { get; set; } = null!;
+        public virtual DbSet<Order> Orders { get; set; } = null!;
+        public virtual DbSet<OrderItem> OrderItems { get; set; } = null!;
         public virtual DbSet<Product> Products { get; set; } = null!;
         public virtual DbSet<ProductType> ProductTypes { get; set; } = null!;
         public virtual DbSet<ProductVariant> ProductVariants { get; set; } = null!;
@@ -48,6 +50,33 @@ namespace BlazorAppWebEcomm.Server.Models
                 entity.Property(e => e.Name).HasMaxLength(50);
 
                 entity.Property(e => e.Url).HasMaxLength(50);
+            });
+
+            modelBuilder.Entity<Order>(entity =>
+            {
+                entity.ToTable("Order");
+
+                entity.Property(e => e.OrderDate).HasColumnType("datetime");
+
+                entity.Property(e => e.TotalPrice).HasColumnType("decimal(18, 2)");
+            });
+
+            modelBuilder.Entity<OrderItem>(entity =>
+            {
+                entity.HasKey(e => new { e.OrderItemId, e.ProductId, e.ProductTypeId })
+                    .HasName("PK_OrderItemId");
+
+                entity.ToTable("OrderItem");
+
+                entity.Property(e => e.OrderItemId).ValueGeneratedOnAdd();
+
+                entity.Property(e => e.TotalPrice).HasColumnType("decimal(18, 0)");
+
+                entity.HasOne(d => d.IdNavigation)
+                    .WithMany(p => p.OrderItems)
+                    .HasForeignKey(d => d.Id)
+                    .OnDelete(DeleteBehavior.ClientSetNull)
+                    .HasConstraintName("FK_OrderItemId_Order");
             });
 
             modelBuilder.Entity<Product>(entity =>

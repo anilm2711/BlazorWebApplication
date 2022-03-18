@@ -7,6 +7,10 @@
     <span>@message</span>
 
 }
+else if(IsOrderPalced==true)
+{
+   <span>Thank you for placing order, to review the order you can check <a href="orders">here</a> </span>  
+}
 else
 {
     <div>
@@ -37,4 +41,5 @@ else
             Total:(@cartProductResponses.Count):$@cartProductResponses.Sum(p=>p.Price *p.Quantity)
         </div>
     </div>
+    <button class="btn alert-success float-end mt-1" @onclick="PlaceOrder">Place Order</button>
 }
