@@ -13,8 +13,7 @@ namespace BlazorAppWebEcomm.Server.Models
         public int Id { get; set; }
         public int UserId { get; set; }
         public DateTime OrderDate { get; set; }
-        public decimal TotalPrice { get; set; }
-        public int OrderItemId { get; set; }
+        public decimal? TotalPrice { get; set; }
 
         public virtual ICollection<OrderItem> OrderItems { get; set; }
     }

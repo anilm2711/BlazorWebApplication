@@ -17,7 +17,14 @@ namespace BlazorAppWebEcomm.Server.Controllers
         [HttpPost]
         public async Task<ActionResult<ServiceResponse<bool>>> PlaceOrder()
         {
-            var result=await orderService.PlaceOrder();
+            var result = await orderService.PlaceOrder();
+            return Ok(result);
+        }
+
+        [HttpGet]
+        public async Task<ActionResult<ServiceResponse<List<OrderOverViewResponse>>>> GetOrders()
+        {
+            var result=await orderService.GetOrders();
             return Ok(result);
         }
     }

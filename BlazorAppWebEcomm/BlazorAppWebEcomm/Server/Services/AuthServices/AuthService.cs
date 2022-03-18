@@ -9,11 +9,13 @@ namespace BlazorAppWebEcomm.Server.Services.AuthServices
     {
         private readonly EcommDatabaseContext context;
         private readonly IConfiguration configuration;
+        private readonly IHttpContextAccessor httpContextAccessor;
 
-        public AuthService(EcommDatabaseContext context,IConfiguration configuration)
+        public AuthService(EcommDatabaseContext context,IConfiguration configuration,IHttpContextAccessor httpContextAccessor)
         {
             this.context = context;
             this.configuration = configuration;
+            this.httpContextAccessor = httpContextAccessor;
         }
 
         public async Task<ServiceResponse<string>> Login(string email, string password)
@@ -131,6 +133,11 @@ namespace BlazorAppWebEcomm.Server.Services.AuthServices
                 Data = true, 
                 Message = "Password has been changed successfully"
             };
+        }
+
+        public int GetUserId()
+        {
+            return int.Parse(httpContextAccessor.HttpContext.User.FindFirstValue(ClaimTypes.NameIdentifier));
         }
     }
 }

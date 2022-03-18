@@ -5,12 +5,12 @@ namespace BlazorAppWebEcomm.Server.Services.CartServices
     public class CartService : ICartService
     {
         private readonly EcommDatabaseContext ecommDatabaseContext;
-        private readonly IHttpContextAccessor httpContextAccessor;
+        private readonly IAuthService authService;
 
-        public CartService(EcommDatabaseContext ecommDatabaseContext,IHttpContextAccessor httpContextAccessor)
+        public CartService(EcommDatabaseContext ecommDatabaseContext,IAuthService authService)
         {
             this.ecommDatabaseContext = ecommDatabaseContext;
-            this.httpContextAccessor = httpContextAccessor;
+            this.authService = authService;
         }
 
         public async Task<ServiceResponse<int>> GetCartItemsCount()
@@ -23,7 +23,7 @@ namespace BlazorAppWebEcomm.Server.Services.CartServices
         }
         public int GetUserId()
         {
-            return int.Parse(httpContextAccessor.HttpContext.User.FindFirstValue(ClaimTypes.NameIdentifier));
+            return authService.GetUserId();
         }
 
         public async Task<ServiceResponse<List<CartProductResponse>>> GetCartProducts(List<Models.CartItem> cartItems)

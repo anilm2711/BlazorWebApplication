@@ -63,20 +63,24 @@ namespace BlazorAppWebEcomm.Server.Models
 
             modelBuilder.Entity<OrderItem>(entity =>
             {
-                entity.HasKey(e => new { e.OrderItemId, e.ProductId, e.ProductTypeId })
+                entity.HasKey(e => e.OrderItemId)
                     .HasName("PK_OrderItemId");
 
                 entity.ToTable("OrderItem");
 
-                entity.Property(e => e.OrderItemId).ValueGeneratedOnAdd();
-
-                entity.Property(e => e.TotalPrice).HasColumnType("decimal(18, 0)");
+                entity.Property(e => e.TotalPrice).HasColumnType("decimal(18, 2)");
 
                 entity.HasOne(d => d.IdNavigation)
                     .WithMany(p => p.OrderItems)
                     .HasForeignKey(d => d.Id)
                     .OnDelete(DeleteBehavior.ClientSetNull)
                     .HasConstraintName("FK_OrderItemId_Order");
+
+                entity.HasOne(d => d.Product)
+                    .WithMany(p => p.OrderItems)
+                    .HasForeignKey(d => d.ProductId)
+                    .OnDelete(DeleteBehavior.ClientSetNull)
+                    .HasConstraintName("FK_OrderItem_Product");
             });
 
             modelBuilder.Entity<Product>(entity =>

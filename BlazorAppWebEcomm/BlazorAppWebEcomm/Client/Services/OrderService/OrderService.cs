@@ -8,6 +8,8 @@ namespace BlazorAppWebEcomm.Client.Services.OrderService
         private readonly NavigationManager navigationManager;
         private readonly HttpClient httpClient;
 
+        private List<OrderOverViewResponse> orderOverViewResponses { get; set; }
+
         public OrderService(HttpClient httpClient,AuthenticationStateProvider authenticationStateProvider,NavigationManager navigationManager)
         {
             this.authenticationStateProvider = authenticationStateProvider;
@@ -30,6 +32,12 @@ namespace BlazorAppWebEcomm.Client.Services.OrderService
             {
                 navigationManager.NavigateTo("login");
             }
+        }
+
+        public async Task<List<OrderOverViewResponse>> GetOrders()
+        {
+            var result = await httpClient.GetFromJsonAsync<ServiceResponse<List<OrderOverViewResponse>>>("api/order");
+            return result.Data;
         }
     }
 }
