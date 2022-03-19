@@ -6,13 +6,13 @@ namespace BlazorAppWebEcomm.Client.Services.CartService
     {
         private readonly ILocalStorageService localStorageService;
         private readonly HttpClient httpClient;
-        private readonly AuthenticationStateProvider authenticationStateProvider;
+        private readonly IAuthService authService;
 
-        public CartService(ILocalStorageService localStorageService,HttpClient httpClient,AuthenticationStateProvider authenticationStateProvider)
+        public CartService(ILocalStorageService localStorageService,HttpClient httpClient,IAuthService authService)
         {
             this.localStorageService = localStorageService;
             this.httpClient = httpClient;
-            this.authenticationStateProvider = authenticationStateProvider;
+            this.authService = authService;
         }
 
         public event Action OnChange;
@@ -46,7 +46,7 @@ namespace BlazorAppWebEcomm.Client.Services.CartService
 
         private async Task<bool> IsUserAuthenticated()
         {
-            return (await authenticationStateProvider.GetAuthenticationStateAsync()).User.Identity.IsAuthenticated;
+            return await authService.IsUserAuthenticated();
         }
 
         public async Task<List<CartProductResponse>> GetCartProducts()

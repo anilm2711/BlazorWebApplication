@@ -15,6 +15,67 @@ namespace BlazorAppWebEcomm.Server.Services.OrderService
             this.authService = authService;
         }
 
+        public async Task<ServiceResponse<List<OrderDetailsResponse>>> GetOrderDetails(int orderId)
+        {
+            var response = new ServiceResponse<List<OrderDetailsResponse>>();
+            List<OrderDetailsResponse> orderDetails = new List<OrderDetailsResponse>();
+            List<OrderDetailProductResponse> orderDetailsResponses = new List<OrderDetailProductResponse>();
+            try
+            {
+                var order = await context.Orders
+                                       .Include(p => p.OrderItems)
+                                       .ThenInclude(p => p.Product)
+                                        .Where(x => x.UserId == authService.GetUserId() && x.Id == orderId)
+                                        .OrderByDescending(p => p.OrderDate).ToListAsync();
+                if (order == null)
+                {
+                    return new ServiceResponse<List<OrderDetailsResponse>>
+                    {
+                        Success = false,
+                        Message = "Order not found."
+                    };
+                }
+
+                List<int> productTypeIds = new List<int>();
+                foreach (var item in order)
+                {
+                    OrderDetailsResponse ordResp = new OrderDetailsResponse();
+                    ordResp.OrderDate = item.OrderDate;
+                    ordResp.TotalPrice = Convert.ToDecimal(item.TotalPrice);
+                    ordResp.Products = new List<OrderDetailProductResponse>();
+                    foreach (OrderItem oItem in item.OrderItems)
+                    {
+                        productTypeIds.Add(oItem.ProductTypeId);
+                        OrderDetailProductResponse orderDetailProduct = new OrderDetailProductResponse();
+                        orderDetailProduct.ProductTypeId = oItem.ProductTypeId;
+                        orderDetailProduct.ProductId = oItem.ProductId;
+                        orderDetailProduct.ProductImageUrl = oItem.Product.ImageUrl;
+                        orderDetailProduct.Title = oItem.Product.Title;
+                        orderDetailProduct.Quantity = oItem.Quantity;
+                        orderDetailProduct.TotalPrice = Convert.ToDecimal(oItem.TotalPrice);
+                        orderDetailsResponses.Add(orderDetailProduct);
+                    }
+                    ordResp.Products.AddRange(orderDetailsResponses);
+                    orderDetails.Add(ordResp);
+                }
+                var prodTyps = await context.ProductTypes.Where(p => productTypeIds.Contains(p.Id)).ToListAsync();
+                foreach (OrderDetailProductResponse orp in orderDetailsResponses)
+                {
+                    orp.ProductType = prodTyps.FirstOrDefault(p => p.Id == orp.ProductTypeId).Name;
+                }
+                response.Data = orderDetails;
+            }
+            catch (Exception ex)
+            {
+                return new ServiceResponse<List<OrderDetailsResponse>>
+                {
+                    Success = false,
+                    Message = ex.Message
+                };
+            }
+            return response;
+        }
+
         public async Task<ServiceResponse<List<OrderOverViewResponse>>> GetOrders()
         {
             var response = new ServiceResponse<List<OrderOverViewResponse>>();

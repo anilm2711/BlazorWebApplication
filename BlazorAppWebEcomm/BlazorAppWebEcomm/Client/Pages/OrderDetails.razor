@@ -1,0 +1,35 @@
+﻿@page "/orderdetails/{orderId:int}"
+<h3>Order Details</h3>
+@if (orders != null)
+{
+    @foreach (var item in orders)
+    {
+        foreach (var prd in item.Products)
+        {
+            <div class="container">
+                <div class="image-wrapper">
+                    <img src=@prd.ProductImageUrl class="image" />
+
+                </div>
+                <div class="name">
+                    <h5>
+                        <a href="/product/@prd.ProductId">@prd.Title</a>
+                    </h5>
+                    <span>@prd.ProductType</span><br />
+                    <span>Quantity: @prd.Quantity</span>
+                </div>
+                <div class="product-price">
+                    Total:@prd.TotalPrice
+                </div>
+            </div>
+        }
+        <hr />
+        <div class="product-price">
+            Total:@item.TotalPrice
+        </div>
+        <div class="product-price">
+            Order Date:@item.OrderDate
+        </div>
+    }
+
+}
