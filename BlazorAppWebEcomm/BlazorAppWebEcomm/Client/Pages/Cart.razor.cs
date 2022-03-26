@@ -13,13 +13,14 @@ namespace BlazorAppWebEcomm.Client.Pages
 
         [Inject]
         IOrderService orderService { get; set; }
+        [Inject]
+        NavigationManager navigationManager { get; set; }
 
         public List<CartProductResponse> cartProductResponses { get; set; } = null;
         string message = "Loading cart...";
-        private bool IsOrderPalced = false;
+
         protected override async Task OnInitializedAsync()
         {
-            IsOrderPalced = false;
           await LoadCart();
         }
 
@@ -53,9 +54,10 @@ namespace BlazorAppWebEcomm.Client.Pages
 
         private async Task PlaceOrder()
         {
-            await orderService.PlaceOrder();
-            await cartService.GetCartItemsCount();
-            IsOrderPalced = true;
+            string url=await orderService.PlaceOrder();
+            //await cartService.GetCartItemsCount();
+            //IsOrderPalced = true;
+            navigationManager.NavigateTo(url);
         }
     }
 }

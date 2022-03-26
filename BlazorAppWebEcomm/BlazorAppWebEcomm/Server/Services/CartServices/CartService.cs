@@ -64,9 +64,11 @@ namespace BlazorAppWebEcomm.Server.Services.CartServices
             return await GetDbCartProducts();
         }
 
-        public async Task<ServiceResponse<List<CartProductResponse>>> GetDbCartProducts()
+        public async Task<ServiceResponse<List<CartProductResponse>>> GetDbCartProducts(int? userId = null)
         {
-            return await GetCartProducts(ecommDatabaseContext.CartItems.Where(p => p.UserId == GetUserId()).ToList());
+            if (userId == null)
+                userId = GetUserId();
+            return await GetCartProducts(ecommDatabaseContext.CartItems.Where(p => p.UserId == userId).ToList());
         }
 
         public async Task<ServiceResponse<bool>> AddToCart(Models.CartItem cartItem)

@@ -139,5 +139,15 @@ namespace BlazorAppWebEcomm.Server.Services.AuthServices
         {
             return int.Parse(httpContextAccessor.HttpContext.User.FindFirstValue(ClaimTypes.NameIdentifier));
         }
+
+        public string GetUserEmail()
+        {
+            return httpContextAccessor.HttpContext.User.FindFirstValue(ClaimTypes.Name);
+        }
+
+        public async Task<User> GetUserByEmailId(string emailid)
+        {
+            return await context.Users.Where(p=>p.Email.Equals(emailid)).FirstOrDefaultAsync();
+        }
     }
 }

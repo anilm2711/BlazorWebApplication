@@ -9,5 +9,7 @@ namespace BlazorAppWebEcomm.Server.Services.AuthServices
         Task<ServiceResponse<string>> Login(string email, string password);
         Task<ServiceResponse<bool>> ChangePassword(int userId, string newPaswword);
         int GetUserId();
+        string GetUserEmail();
+        Task<User> GetUserByEmailId(string emailid);
     }
 }

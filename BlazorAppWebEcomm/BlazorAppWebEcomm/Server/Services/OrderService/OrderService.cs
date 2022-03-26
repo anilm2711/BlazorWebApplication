@@ -107,9 +107,9 @@ namespace BlazorAppWebEcomm.Server.Services.OrderService
             return response;
         }
 
-        public async Task<ServiceResponse<bool>> PlaceOrder()
+        public async Task<ServiceResponse<bool>> PlaceOrder(int userId)
         {
-            var products = (await cartService.GetDbCartProducts()).Data;
+            var products = (await cartService.GetDbCartProducts(userId)).Data;
             decimal totalPrice = 0;
             foreach (var p in products)
             {
@@ -129,14 +129,14 @@ namespace BlazorAppWebEcomm.Server.Services.OrderService
 
             var order = new Order()
             {
-                UserId = authService.GetUserId(),
+                UserId = userId,
                 OrderDate = DateTime.Now,
                 TotalPrice = totalPrice,
                 OrderItems = orderItems
             };
 
             context.Orders.Add(order);
-            context.CartItems.RemoveRange(context.CartItems.Where(p => p.UserId == authService.GetUserId()));
+            context.CartItems.RemoveRange(context.CartItems.Where(p => p.UserId == userId));
             await context.SaveChangesAsync();
             return new ServiceResponse<bool>() { Data = true };
         }
