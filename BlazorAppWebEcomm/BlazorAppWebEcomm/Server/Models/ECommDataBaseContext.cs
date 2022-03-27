@@ -16,6 +16,7 @@ namespace BlazorAppWebEcomm.Server.Models
         {
         }
 
+        public virtual DbSet<Address> Addresses { get; set; } = null!;
         public virtual DbSet<CartItem> CartItems { get; set; } = null!;
         public virtual DbSet<Category> Categories { get; set; } = null!;
         public virtual DbSet<Order> Orders { get; set; } = null!;
@@ -36,6 +37,31 @@ namespace BlazorAppWebEcomm.Server.Models
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
+            modelBuilder.Entity<Address>(entity =>
+            {
+                entity.ToTable("Address");
+
+                entity.Property(e => e.City).HasMaxLength(20);
+
+                entity.Property(e => e.Country).HasMaxLength(20);
+
+                entity.Property(e => e.FirstName).HasMaxLength(50);
+
+                entity.Property(e => e.LastName).HasMaxLength(50);
+
+                entity.Property(e => e.State).HasMaxLength(50);
+
+                entity.Property(e => e.Street).HasMaxLength(50);
+
+                entity.Property(e => e.Zip).HasMaxLength(10);
+
+                entity.HasOne(d => d.User)
+                    .WithMany(p => p.Addresses)
+                    .HasForeignKey(d => d.UserId)
+                    .OnDelete(DeleteBehavior.ClientSetNull)
+                    .HasConstraintName("FK_Address_User");
+            });
+
             modelBuilder.Entity<CartItem>(entity =>
             {
                 entity.HasKey(e => new { e.UserId, e.ProductId, e.ProductTypeId });
