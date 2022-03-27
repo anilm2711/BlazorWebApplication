@@ -43,6 +43,13 @@ namespace BlazorAppWebEcomm.Server.Services.PaymentService
                 {
                     "card"
                 },
+                ShippingAddressCollection=new SessionShippingAddressCollectionOptions
+                {
+                    AllowedCountries=new List<string>
+                    {
+                        "IN"
+                    }
+                },
                 LineItems=lineItems,
                 Mode="payment",
                 SuccessUrl= "https://localhost:44362/order-success",
