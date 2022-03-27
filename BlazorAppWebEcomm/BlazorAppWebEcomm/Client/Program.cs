@@ -10,6 +10,7 @@ global using BlazorAppWebEcomm.Client.Services.CartService;
 global using BlazorAppWebEcomm.Client.Services.AuthServices;
 global using Microsoft.AspNetCore.Components.Authorization;
 global using BlazorAppWebEcomm.Client.Services.OrderService;
+global using BlazorAppWebEcomm.Client.Services.AddressService;
 
 var builder = WebAssemblyHostBuilder.CreateDefault(args);
 builder.RootComponents.Add<App>("#app");
@@ -21,6 +22,7 @@ builder.Services.AddScoped<ICategoryService, CategoryService>();
 builder.Services.AddScoped<ICartService, CartService>();
 builder.Services.AddScoped<IAuthService, AuthService>();
 builder.Services.AddScoped<IOrderService, OrderService>();
+builder.Services.AddScoped<IAddressService, AddressService>();
 builder.Services.AddOptions();
 builder.Services.AddAuthorizationCore();
 builder.Services.AddScoped<AuthenticationStateProvider, CustomAuthenticateStateProvider>();

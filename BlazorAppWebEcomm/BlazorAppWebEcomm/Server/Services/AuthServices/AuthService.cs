@@ -40,7 +40,7 @@ namespace BlazorAppWebEcomm.Server.Services.AuthServices
             return response;
         }
 
-        public async Task<ServiceResponse<int>> Register(User user, string password)
+        public async Task<ServiceResponse<int>> Register(Models.User user, string password)
         {
             if (await UserExists(user.Email))
             {
@@ -94,7 +94,7 @@ namespace BlazorAppWebEcomm.Server.Services.AuthServices
             }
         }
 
-        private string  CreateToken(User user)
+        private string  CreateToken(Models.User user)
         {
             List<Claim> claims = new List<Claim>
             {
@@ -145,7 +145,7 @@ namespace BlazorAppWebEcomm.Server.Services.AuthServices
             return httpContextAccessor.HttpContext.User.FindFirstValue(ClaimTypes.Name);
         }
 
-        public async Task<User> GetUserByEmailId(string emailid)
+        public async Task<Models.User> GetUserByEmailId(string emailid)
         {
             return await context.Users.Where(p=>p.Email.Equals(emailid)).FirstOrDefaultAsync();
         }

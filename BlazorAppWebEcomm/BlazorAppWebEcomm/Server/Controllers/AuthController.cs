@@ -20,8 +20,8 @@ namespace BlazorAppWebEcomm.Server.Controllers
         public async Task<ActionResult<ServiceResponse<int>>> Register(UserRegister request)
         {
             var response=await authService.Register
-                (new User 
-                    {
+                (new Models.User
+                {
                         Email=request.Email
                     },
                     request.Password);

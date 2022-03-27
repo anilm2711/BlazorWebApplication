@@ -54,12 +54,6 @@ namespace BlazorAppWebEcomm.Server.Models
                 entity.Property(e => e.Street).HasMaxLength(50);
 
                 entity.Property(e => e.Zip).HasMaxLength(10);
-
-                entity.HasOne(d => d.User)
-                    .WithMany(p => p.Addresses)
-                    .HasForeignKey(d => d.UserId)
-                    .OnDelete(DeleteBehavior.ClientSetNull)
-                    .HasConstraintName("FK_Address_User");
             });
 
             modelBuilder.Entity<CartItem>(entity =>

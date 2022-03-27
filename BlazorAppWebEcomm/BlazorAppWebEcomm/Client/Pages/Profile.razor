@@ -4,6 +4,9 @@
 <AuthorizeView>
     <h3>You are logged in with <i>@context.User.Identity.Name </i></h3>
 </AuthorizeView>
+<h5>Delivery Address</h5>
+<AddressForm></AddressForm>
+<p></p>
 <h5>Change Password</h5>
 <EditForm Model="userChangePassword" OnValidSubmit="ChangePassword">
     <DataAnnotationsValidator></DataAnnotationsValidator>

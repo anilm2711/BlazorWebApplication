@@ -15,12 +15,17 @@ namespace BlazorAppWebEcomm.Client.Pages
         IOrderService orderService { get; set; }
         [Inject]
         NavigationManager navigationManager { get; set; }
+        [Inject]
+        public IAuthService authService { get; set; }
+        bool isAuthenticated = false;
+
 
         public List<CartProductResponse> cartProductResponses { get; set; } = null;
         string message = "Loading cart...";
 
         protected override async Task OnInitializedAsync()
         {
+            isAuthenticated =await authService.IsUserAuthenticated();
           await LoadCart();
         }
 

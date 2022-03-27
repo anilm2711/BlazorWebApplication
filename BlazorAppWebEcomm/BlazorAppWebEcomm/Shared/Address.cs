@@ -1,9 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
 
-namespace BlazorAppWebEcomm.Server.Models
+namespace BlazorAppWebEcomm.Shared
 {
-    public partial class Address
+    public class Address
     {
         public int Id { get; set; }
         public int UserId { get; set; }
@@ -14,5 +17,6 @@ namespace BlazorAppWebEcomm.Server.Models
         public string State { get; set; } = null!;
         public string Zip { get; set; } = null!;
         public string Country { get; set; } = null!;
+
     }
 }

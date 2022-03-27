@@ -7,6 +7,7 @@ global using BlazorAppWebEcomm.Server.Services.CartServices;
 global using BlazorAppWebEcomm.Server.Services.AuthServices;
 global using BlazorAppWebEcomm.Server.Services.OrderService;
 global using BlazorAppWebEcomm.Server.Services.PaymentService;
+global using BlazorAppWebEcomm.Server.Services.AddressService;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.IdentityModel.Tokens;
 
@@ -27,6 +28,7 @@ builder.Services.AddScoped<ICartService, CartService>();
 builder.Services.AddScoped<IAuthService, AuthService>();
 builder.Services.AddScoped<IOrderService,OrderService>();
 builder.Services.AddScoped<IPaymentService, PaymentService>();
+builder.Services.AddScoped<IAddressService, AddressService>();
 builder.Services.AddHttpContextAccessor();
 builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
     .AddJwtBearer(options => 
