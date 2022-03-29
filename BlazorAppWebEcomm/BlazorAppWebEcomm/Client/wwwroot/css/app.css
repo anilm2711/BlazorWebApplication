@@ -3,7 +3,7 @@
 html, body, div {
     font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
     font-size: 13px;
-    background-color: #808080;
+    background-color:darkgrey;
 }
 
 h1:focus {
@@ -75,5 +75,6 @@ a, .btn-link {
 }
 .price {
     color: green;
+    font-weight:300;
 }
 

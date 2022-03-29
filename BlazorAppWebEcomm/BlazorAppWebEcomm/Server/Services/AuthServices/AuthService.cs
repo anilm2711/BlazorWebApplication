@@ -137,7 +137,16 @@ namespace BlazorAppWebEcomm.Server.Services.AuthServices
 
         public int GetUserId()
         {
-            return int.Parse(httpContextAccessor.HttpContext.User.FindFirstValue(ClaimTypes.NameIdentifier));
+            try
+            {
+                return int.Parse(httpContextAccessor.HttpContext.User.FindFirstValue(ClaimTypes.NameIdentifier));
+            }
+            catch (Exception ex )
+            {
+
+                throw ex;
+            }
+
         }
 
         public string GetUserEmail()

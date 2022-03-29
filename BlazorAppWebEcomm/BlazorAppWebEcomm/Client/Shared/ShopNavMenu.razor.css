@@ -19,12 +19,12 @@
 }
 
 .nav-item {
-    font-size: 0.9rem;
+    font-size: 1.0rem;
     padding-bottom: 0.5rem;
     padding-top:0.5rem;
 }
     .nav-item ::deep a {
-        color: #d7d7d7;
+        color: #2f1010;
         border-radius: 4px;
         height: 3rem;
         display: flex;
