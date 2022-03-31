@@ -70,6 +70,10 @@ namespace BlazorAppWebEcomm.Server.Models
                 entity.Property(e => e.Name).HasMaxLength(50);
 
                 entity.Property(e => e.Url).HasMaxLength(50);
+
+                entity.Property(e => e.Visible)
+                    .IsRequired()
+                    .HasDefaultValueSql("((1))");
             });
 
             modelBuilder.Entity<Order>(entity =>
@@ -150,6 +154,10 @@ namespace BlazorAppWebEcomm.Server.Models
                 entity.Property(e => e.DateCreated).HasColumnType("datetime");
 
                 entity.Property(e => e.Email).HasMaxLength(50);
+
+                entity.Property(e => e.Role)
+                    .HasMaxLength(50)
+                    .HasDefaultValueSql("('Customer')");
             });
 
             OnModelCreatingPartial(modelBuilder);

@@ -14,5 +14,6 @@ namespace BlazorAppWebEcomm.Shared
         public byte[] PasswordSalt { get; set; }= new byte[0];
         public DateTime DateCreated { get; set; } = DateTime.Now;
         public int? AddressId { get; set; }
+        public string Role { get; set; } = "Customer";
     }
 }

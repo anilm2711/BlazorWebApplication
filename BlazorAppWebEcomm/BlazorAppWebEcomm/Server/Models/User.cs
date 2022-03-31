@@ -10,6 +10,6 @@ namespace BlazorAppWebEcomm.Server.Models
         public byte[] PasswordHash { get; set; } = null!;
         public byte[] PasswordSalt { get; set; } = null!;
         public DateTime DateCreated { get; set; }
-        public int? AddressId { get; set; }
+        public string Role { get; set; } = null!;
     }
 }
