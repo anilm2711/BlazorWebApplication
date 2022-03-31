@@ -15,6 +15,8 @@ namespace BlazorAppWebEcomm.Server.Models
         public string Url { get; set; } = null!;
         public bool? Visible { get; set; }
         public bool Deleted { get; set; }
+        public bool? Editing { get; set; }
+        public bool? IsNew { get; set; }
 
         public virtual ICollection<Product> Products { get; set; }
     }

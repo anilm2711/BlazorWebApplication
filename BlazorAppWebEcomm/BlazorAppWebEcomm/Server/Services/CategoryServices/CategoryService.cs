@@ -35,7 +35,7 @@ namespace BlazorAppWebEcomm.Server.Services.CategoryServices
             {
                 responseProdcuts = new ServiceResponse<List<Models.Category>>()
                 {
-                    Data = await _eCommDataBaseContext.Categories.ToListAsync()
+                    Data = await _eCommDataBaseContext.Categories.Where(p=>p.Deleted==false && p.Visible==true).ToListAsync()
                 };
             }
             catch (Exception ex)
@@ -44,6 +44,74 @@ namespace BlazorAppWebEcomm.Server.Services.CategoryServices
                 responseProdcuts.Message = ex.Message;
             }
             return responseProdcuts;
+        }
+
+        public async Task<ServiceResponse<List<Models.Category>>> GetAdminCategories()
+        {
+            ServiceResponse<List<Models.Category>> responseProdcuts = new ServiceResponse<List<Models.Category>>();
+            try
+            {
+                responseProdcuts = new ServiceResponse<List<Models.Category>>()
+                {
+                    Data = await _eCommDataBaseContext.Categories.Where(p => p.Deleted == false).ToListAsync()
+                };
+            }
+            catch (Exception ex)
+            {
+                responseProdcuts.Success = false;
+                responseProdcuts.Message = ex.Message;
+            }
+            return responseProdcuts;
+        }
+
+        public async Task<ServiceResponse<List<Models.Category>>> AddCategory(Models.Category category)
+        {
+            category.Editing = category.IsNew = false;
+            _eCommDataBaseContext.Categories.Add(category);
+            await _eCommDataBaseContext.SaveChangesAsync();
+            return await GetAdminCategories();
+        }
+
+        public async Task<ServiceResponse<List<Models.Category>>> UpdateCategory(Models.Category category)
+        {
+            var dbCategory = await GetCategoryById(category.Id);
+            if (dbCategory == null)
+            {
+                return new ServiceResponse<List<Models.Category>>
+                {
+                    Success = false,
+                    Message = "Category not found."
+                };
+            }
+            dbCategory.Name = category.Name;
+            dbCategory.Url = category.Url;
+            dbCategory.Deleted = category.Deleted;
+            dbCategory.Visible = category.Visible;
+            dbCategory.Editing = category.Editing;
+            dbCategory.IsNew = category.IsNew;
+            await _eCommDataBaseContext.SaveChangesAsync();
+            return await GetAdminCategories();
+        }
+
+        public async Task<ServiceResponse<List<Models.Category>>> DeleteCategory(int Id)
+        {
+            var category=await GetCategoryById(Id);
+            if(category==null)
+            {
+                return new ServiceResponse<List<Models.Category>>
+                {
+                    Success = false,
+                    Message = "Category not Found."
+                };
+            }
+            category.Deleted = true;
+            await _eCommDataBaseContext.SaveChangesAsync();
+            return await GetAdminCategories();
+        }
+
+        private async Task<Models.Category> GetCategoryById(int Id)
+        {
+            return await _eCommDataBaseContext.Categories.FindAsync(Id);
         }
     }
 }
