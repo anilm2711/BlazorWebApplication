@@ -14,9 +14,6 @@ namespace BlazorAppWebEcomm.Server.Models
         public int Id { get; set; }
         public string? Name { get; set; }
         [JsonIgnore]
-        public bool? Editing { get; set; }
-        public bool? IsNew { get; set; }
-
         public virtual ICollection<ProductVariant> ProductVariants { get; set; }
     }
 }
