@@ -10,5 +10,7 @@ namespace BlazorAppWebEcomm.Shared
     {
         public int Id { get; set; }
         public string Name { get; set; } = string.Empty;
+        public bool? Editing { get; set; }
+        public bool? IsNew { get; set; }
     }
 }
