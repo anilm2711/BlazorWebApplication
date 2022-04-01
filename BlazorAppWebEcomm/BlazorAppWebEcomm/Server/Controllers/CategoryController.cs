@@ -43,7 +43,7 @@ namespace BlazorAppWebEcomm.Server.Controllers
             var result = await _categoryService.AddCategory(category);
             return Ok(result);
         }
-        [HttpPost("deletecategory/{Id}"), Authorize(Roles = "Admin")]
+        [HttpDelete("deletecategory/{Id}"), Authorize(Roles = "Admin")]
         public async Task<ActionResult<ServiceResponse<List<Models.Category>>>> DeleteCategory(int Id)
         {
             var result = await _categoryService.DeleteCategory(Id);

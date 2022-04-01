@@ -87,8 +87,6 @@ namespace BlazorAppWebEcomm.Server.Services.CategoryServices
             dbCategory.Url = category.Url;
             dbCategory.Deleted = category.Deleted;
             dbCategory.Visible = category.Visible;
-            dbCategory.Editing = category.Editing;
-            dbCategory.IsNew = category.IsNew;
             await _eCommDataBaseContext.SaveChangesAsync();
             return await GetAdminCategories();
         }

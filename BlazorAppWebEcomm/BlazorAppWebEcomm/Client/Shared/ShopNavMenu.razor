@@ -1,6 +1,6 @@
 ﻿@using BlazorAppWebEcomm.Client.Services.CategoryServices
 @inject ICategoryService categoriesService
-
+@implements IDisposable
 <div class="top-row ps-3 navbar navbar-dark navbar-toggler-wrapper">
     <div class="container-fluid">
         <a class="navbar-brand" href="">BlazorAppWebEcomm</a>
@@ -44,5 +44,11 @@
     protected override async Task OnInitializedAsync()
     {
         await categoriesService.GetCategories();
+        categoriesService.OnChange += StateHasChanged;
+
+    }
+    public void Dispose()
+    {
+        categoriesService.OnChange -=StateHasChanged;
     }
 }
