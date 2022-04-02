@@ -139,6 +139,10 @@ namespace BlazorAppWebEcomm.Server.Models
 
                 entity.Property(e => e.Price).HasColumnType("decimal(18, 2)");
 
+                entity.Property(e => e.Visible)
+                    .IsRequired()
+                    .HasDefaultValueSql("((1))");
+
                 entity.HasOne(d => d.Product)
                     .WithMany(p => p.ProductVariants)
                     .HasForeignKey(d => d.ProductId)
