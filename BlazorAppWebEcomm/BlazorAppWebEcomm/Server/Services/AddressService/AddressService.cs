@@ -2,10 +2,10 @@
 {
     public class AddressService : IAddressService
     {
-        private readonly EcommDatabaseContext context;
+        private readonly ECommDatabaseContext context;
         private readonly IAuthService authService;
 
-        public AddressService(EcommDatabaseContext context ,IAuthService authService)
+        public AddressService(ECommDatabaseContext context ,IAuthService authService)
         {
             this.context = context;
             this.authService = authService;

@@ -5,9 +5,9 @@ namespace BlazorAppWebEcomm.Server.Services.CategoryServices
 {
     public class CategoryService : ICategoryService
     {
-        private readonly EcommDatabaseContext _eCommDataBaseContext;
+        private readonly ECommDatabaseContext _eCommDataBaseContext;
 
-        public CategoryService(EcommDatabaseContext eCommDataBaseContext)
+        public CategoryService(ECommDatabaseContext eCommDataBaseContext)
         {
             this._eCommDataBaseContext = eCommDataBaseContext;
         }

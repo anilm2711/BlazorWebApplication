@@ -7,11 +7,11 @@ namespace BlazorAppWebEcomm.Server.Services.AuthServices
 {
     public class AuthService : IAuthService
     {
-        private readonly EcommDatabaseContext context;
+        private readonly ECommDatabaseContext context;
         private readonly IConfiguration configuration;
         private readonly IHttpContextAccessor httpContextAccessor;
 
-        public AuthService(EcommDatabaseContext context,IConfiguration configuration,IHttpContextAccessor httpContextAccessor)
+        public AuthService(ECommDatabaseContext context,IConfiguration configuration,IHttpContextAccessor httpContextAccessor)
         {
             this.context = context;
             this.configuration = configuration;

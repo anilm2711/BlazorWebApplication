@@ -5,13 +5,13 @@ using Microsoft.EntityFrameworkCore.Metadata;
 
 namespace BlazorAppWebEcomm.Server.Models
 {
-    public partial class EcommDatabaseContext : DbContext
+    public partial class ECommDatabaseContext : DbContext
     {
-        public EcommDatabaseContext()
+        public ECommDatabaseContext()
         {
         }
 
-        public EcommDatabaseContext(DbContextOptions<EcommDatabaseContext> options)
+        public ECommDatabaseContext(DbContextOptions<ECommDatabaseContext> options)
             : base(options)
         {
         }
@@ -30,8 +30,7 @@ namespace BlazorAppWebEcomm.Server.Models
         {
             if (!optionsBuilder.IsConfigured)
             {
-#warning To protect potentially sensitive information in your connection string, you should move it out of source code. You can avoid scaffolding the connection string by using the Name= syntax to read it from configuration - see https://go.microsoft.com/fwlink/?linkid=2131148. For more guidance on storing connection strings, see http://go.microsoft.com/fwlink/?LinkId=723263.
-                optionsBuilder.UseSqlServer("Server=.\\SQLExpress;Database=EcommDatabase;Trusted_Connection=True;");
+                optionsBuilder.UseSqlServer("Name=ConnectionStrings:DefaultConnection");
             }
         }
 
@@ -112,6 +111,10 @@ namespace BlazorAppWebEcomm.Server.Models
                 entity.ToTable("Product");
 
                 entity.Property(e => e.Title).HasMaxLength(50);
+
+                entity.Property(e => e.Visible)
+                    .IsRequired()
+                    .HasDefaultValueSql("((1))");
 
                 entity.HasOne(d => d.Category)
                     .WithMany(p => p.Products)

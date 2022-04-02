@@ -4,11 +4,11 @@ namespace BlazorAppWebEcomm.Server.Services.OrderService
 {
     public class OrderService : IOrderService
     {
-        private readonly EcommDatabaseContext context;
+        private readonly ECommDatabaseContext context;
         private readonly ICartService cartService;
         private readonly IAuthService authService;
 
-        public OrderService(EcommDatabaseContext context, ICartService cartService, IAuthService authService)
+        public OrderService(ECommDatabaseContext context, ICartService cartService, IAuthService authService)
         {
             this.context = context;
             this.cartService = cartService;

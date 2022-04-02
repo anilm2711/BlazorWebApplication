@@ -4,10 +4,10 @@ namespace BlazorAppWebEcomm.Server.Services.CartServices
 {
     public class CartService : ICartService
     {
-        private readonly EcommDatabaseContext ecommDatabaseContext;
+        private readonly ECommDatabaseContext ecommDatabaseContext;
         private readonly IAuthService authService;
 
-        public CartService(EcommDatabaseContext ecommDatabaseContext,IAuthService authService)
+        public CartService(ECommDatabaseContext ecommDatabaseContext,IAuthService authService)
         {
             this.ecommDatabaseContext = ecommDatabaseContext;
             this.authService = authService;

@@ -5,9 +5,9 @@ namespace BlazorAppWebEcomm.Server.Services.ProductServices
 {
     public class ProductService : IProductService
     {
-        private readonly EcommDatabaseContext _eCommDataBaseContext;
+        private readonly ECommDatabaseContext _eCommDataBaseContext;
 
-        public ProductService(EcommDatabaseContext eCommDataBaseContext)
+        public ProductService(ECommDatabaseContext eCommDataBaseContext)
         {
             this._eCommDataBaseContext = eCommDataBaseContext;
         }

@@ -12,11 +12,13 @@ namespace BlazorAppWebEcomm.Server.Models
         }
 
         public int ProductId { get; set; }
-        public string? Title { get; set; }
+        public string Title { get; set; } = null!;
         public string? Description { get; set; }
         public string? ImageUrl { get; set; }
         public int? CategoryId { get; set; }
         public bool? Featured { get; set; }
+        public bool? Visible { get; set; }
+        public bool Deleted { get; set; }
 
         public virtual Category? Category { get; set; }
         public virtual ICollection<OrderItem> OrderItems { get; set; }

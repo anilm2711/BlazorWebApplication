@@ -2,9 +2,9 @@
 {
     public class ProductTypeService : IProductTypeService
     {
-        private readonly EcommDatabaseContext context;
+        private readonly ECommDatabaseContext context;
 
-        public ProductTypeService(EcommDatabaseContext context)
+        public ProductTypeService(ECommDatabaseContext context)
         {
             this.context = context;
         }
