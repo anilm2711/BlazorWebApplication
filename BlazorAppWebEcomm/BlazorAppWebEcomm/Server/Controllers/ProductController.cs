@@ -1,5 +1,6 @@
 ﻿using BlazorAppWebEcomm.Server.Models;
 using BlazorAppWebEcomm.Server.Services.ProductServices;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
@@ -15,6 +16,13 @@ namespace BlazorAppWebEcomm.Server.Controllers
         public ProductController(IProductService productService)
         {
             this._productService = productService;
+        }
+
+        [HttpGet("api/Product/admin"),Authorize(Roles ="Admin")]
+        public async Task<ActionResult<ServiceResponse<List<Models.Product>>>> GetAdminProducts()
+        {
+            ServiceResponse<List<Models.Product>>? products = await _productService.GetAdminProducts();
+            return Ok(products);
         }
 
         [HttpGet]

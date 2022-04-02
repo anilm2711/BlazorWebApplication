@@ -11,5 +11,7 @@ namespace BlazorAppWebEcomm.Server.Services.ProductServices
 
         Task<ServiceResponse<List<string>>> GetProductSearchSuggestion(string searchText);
         Task<ServiceResponse<List<Models.Product>>> GetFeaturedProductsAsync();
+
+        Task<ServiceResponse<List<Models.Product>>> GetAdminProducts();
     }
 }

@@ -17,5 +17,10 @@ namespace BlazorAppWebEcomm.Shared
         public int? CategoryId { get; set; }
         public List<ProductVariant> ProductVariants { get; set; } = new List<ProductVariant>();
 
+        public bool Visible { get; set; } = true;
+        public bool Deleted { get; set; } = false;
+        public bool? Editing { get; set; }
+        public bool? IsNew { get; set; }
+
     }
 }

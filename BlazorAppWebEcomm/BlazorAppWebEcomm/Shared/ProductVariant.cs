@@ -23,5 +23,10 @@ namespace BlazorAppWebEcomm.Shared
 
         [Column(TypeName = "decimal(18,2)")]
         public decimal OriginalPrice { get; set; }
+
+        public bool Visible { get; set; } = true;
+        public bool Deleted { get; set; } = false;
+        public bool? Editing { get; set; }
+        public bool? IsNew { get; set; }
     }
 }
