@@ -4,7 +4,7 @@
     {
         event Action ProductsChanged;
         List<Product> Products { get; set; }
-
+        List<Product> AdminProducts { get; set; }   
         public int CurrentPage { get; set; }
         public int PageCount { get; set; }
 
@@ -18,5 +18,8 @@
         Task GetProductByCategory(string categoryUrl);
 
         Task<List<string>> GetProductSearchSuggestion(string searchText);
+        Task GetAdminProducts();
+
+
     }
 }
