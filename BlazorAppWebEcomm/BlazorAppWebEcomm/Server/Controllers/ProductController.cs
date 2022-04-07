@@ -41,6 +41,30 @@ namespace BlazorAppWebEcomm.Server.Controllers
             return Ok(product);
         }
 
+        [HttpPost, Authorize(Roles = "Admin")]
+        [Route("api/Product/createproduct")]
+        public async Task<ActionResult<ServiceResponse<Models.Product>>> CreateProduct(Models.Product product)
+        {
+            ServiceResponse<Models.Product> response = await _productService.CreateProductAsync(product);
+            return Ok(response);
+        }
+
+        [HttpPut,Authorize(Roles="Admin")]
+        [Route("api/Product/updateproduct")]
+        public async Task<ActionResult<ServiceResponse<Models.Product>>> UpdateProduct(Models.Product product)
+        {
+            ServiceResponse<Models.Product> response = await _productService.UpdateProductAsync(product);
+            return Ok(product);
+        }
+
+        [HttpDelete, Authorize(Roles = "Admin")]
+        [Route("api/Product/deleteproduct/{productId}")]
+        public async Task<ActionResult<ServiceResponse<bool>>> DeleteProduct(int productId)
+        {
+            ServiceResponse<bool> product = await _productService.DeleteProductAsync(productId);
+            return Ok(product);
+        }
+
         [HttpGet]
         [Route("api/Product/GetProductsByCategory/{categoryUrl}")]
         public async Task<ActionResult<ServiceResponse<List<Models.Product>>>> GetProductsByCategory(string categoryUrl)

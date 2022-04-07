@@ -6,18 +6,30 @@ namespace BlazorAppWebEcomm.Server.Services.ProductServices
     public class ProductService : IProductService
     {
         private readonly ECommDatabaseContext _eCommDataBaseContext;
+        private readonly IHttpContextAccessor httpContextAccessor;
 
-        public ProductService(ECommDatabaseContext eCommDataBaseContext)
+        public ProductService(ECommDatabaseContext eCommDataBaseContext,IHttpContextAccessor httpContextAccessor)
         {
             this._eCommDataBaseContext = eCommDataBaseContext;
+            this.httpContextAccessor = httpContextAccessor;
         }
 
         public async Task<ServiceResponse<Models.Product>> GetProductAsync(int productId)
         {
             var response = new ServiceResponse<Models.Product>();
-            var product = await _eCommDataBaseContext.Products
-                .Include(e => e.ProductVariants.Where(p => p.Visible == true && p.Deleted == false))
-                .ThenInclude(x => x.ProductType).FirstOrDefaultAsync(p => p.ProductId == productId && p.Visible == true && p.Deleted == false) ;
+            Models.Product product = null;
+            if (httpContextAccessor.HttpContext.User.IsInRole("Admin") == true)
+            {
+                product = await _eCommDataBaseContext.Products
+                 .Include(e => e.ProductVariants.Where(p => p.Visible == true ))
+                 .ThenInclude(x => x.ProductType).FirstOrDefaultAsync(p => p.ProductId == productId && p.Visible == true);
+            }
+            else
+            {
+                product = await _eCommDataBaseContext.Products
+                    .Include(e => e.ProductVariants.Where(p => p.Visible == true && p.Deleted == false))
+                    .ThenInclude(x => x.ProductType).FirstOrDefaultAsync(p => p.ProductId == productId && p.Visible == true && p.Deleted == false);
+            }
             if (product == null)
             {
                 response.Success = false;
@@ -162,6 +174,75 @@ namespace BlazorAppWebEcomm.Server.Services.ProductServices
                 responseProdcuts.Message = ex.Message;
             }
             return responseProdcuts;
+        }
+
+        public async Task<ServiceResponse<Models.Product>> CreateProductAsync(Models.Product product)
+        {
+            foreach (var item in product.ProductVariants)
+            {
+                item.ProductType = null;
+            }
+            _eCommDataBaseContext.Products.Add(product);
+            await _eCommDataBaseContext.SaveChangesAsync();
+            return new ServiceResponse<Models.Product>()
+            {
+                Data=product
+            };
+        }
+
+        public async Task<ServiceResponse<Models.Product>> UpdateProductAsync(Models.Product product)
+        {
+            var dbProduct = await _eCommDataBaseContext.Products.Where(p=>p.ProductId==product.ProductId).FirstOrDefaultAsync();
+            if (dbProduct == null)
+            {
+                return new ServiceResponse<Models.Product>()
+                { 
+                    Success = false,
+                    Message = "Product not found."
+                };
+            }
+            dbProduct.Title=product.Title;
+            dbProduct.Description = product.Description;
+            dbProduct.CategoryId = product.CategoryId;
+            dbProduct.Visible = product.Visible;
+            dbProduct.Title = product.Title;
+            dbProduct.Featured  = product.Featured;
+            foreach (var item in product.ProductVariants)
+            {
+                var dbVariant =await _eCommDataBaseContext.ProductVariants.SingleOrDefaultAsync(p => p.ProductId == item.ProductId
+                  && p.ProductType == item.ProductType);
+                if(dbVariant==null)
+                {
+                    item.ProductType = null;
+                    _eCommDataBaseContext.ProductVariants.Add(item);
+                }
+                else
+                {
+                    dbVariant.ProductTypeId = item.ProductTypeId;
+                    dbVariant.Price = item.Price;
+                    dbVariant.OriginalPrice = item.OriginalPrice;
+                    dbVariant.Visible = item.Visible;
+                    dbVariant.Deleted = item.Deleted;
+                }
+            }
+            await _eCommDataBaseContext.SaveChangesAsync();
+
+            return new ServiceResponse<Models.Product>
+            {
+                Data = dbProduct
+            };
+        }
+
+        public async Task<ServiceResponse<bool>> DeleteProductAsync(int productId)
+        {
+            var dbProduct =await  _eCommDataBaseContext.Products.FindAsync(productId);
+            if(dbProduct==null)
+            {
+                return new ServiceResponse<bool>() { Success = false, Data = false, Message = "Product not found." };
+            }
+            dbProduct.Deleted = true;
+            await _eCommDataBaseContext.SaveChangesAsync();
+            return new ServiceResponse<bool> { Data = true };
         }
     }
 }

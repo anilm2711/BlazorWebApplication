@@ -16,7 +16,7 @@ namespace BlazorAppWebEcomm.Server.Models
         public string? Description { get; set; }
         public string? ImageUrl { get; set; }
         public int? CategoryId { get; set; }
-        public bool? Featured { get; set; }
+        public bool Featured { get; set; }
         public bool? Visible { get; set; }
         public bool Deleted { get; set; }
 

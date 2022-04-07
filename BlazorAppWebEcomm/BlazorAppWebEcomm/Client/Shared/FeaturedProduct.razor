@@ -8,7 +8,7 @@ else
     <div class="container">
         @foreach (var item in _productService.Products)
         {
-            @if (item.Featured != null && item.Featured.Value == true)
+            @if (item.Featured == true)
             {
                 <div class="featured-product">
                     <div>

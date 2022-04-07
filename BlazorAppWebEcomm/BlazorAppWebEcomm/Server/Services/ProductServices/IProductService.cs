@@ -13,5 +13,8 @@ namespace BlazorAppWebEcomm.Server.Services.ProductServices
         Task<ServiceResponse<List<Models.Product>>> GetFeaturedProductsAsync();
 
         Task<ServiceResponse<List<Models.Product>>> GetAdminProducts();
+        Task<ServiceResponse<Models.Product>> CreateProductAsync(Models.Product product);
+        Task<ServiceResponse<Models.Product>> UpdateProductAsync(Models.Product product);
+        Task<ServiceResponse<bool>> DeleteProductAsync(int productId);
     }
 }

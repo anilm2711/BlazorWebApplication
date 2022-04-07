@@ -83,5 +83,25 @@ namespace BlazorAppWebEcomm.Client.Services.ProductServices
             if (AdminProducts.Count == 0)
                 Message = "No Procuts.";
         }
+
+        public async Task<Product> CreateProductAsync(Product product)
+        {
+            var result = await _httpClient.PostAsJsonAsync("api/product/creteproduct", product);
+            var newproduct = (await result.Content.ReadFromJsonAsync<ServiceResponse<Product>>()).Data;
+            return newproduct;
+        }
+
+        public async Task<Product> UpdateProductAsync(Product product)
+        {
+            var result = await _httpClient.PutAsJsonAsync("api/product/updateproduct", product);
+            var poductupdated = (await result.Content.ReadFromJsonAsync<Product>());
+            return poductupdated;
+          
+        }
+
+        public async Task DeleteProductAsync(Product product)
+        {
+            var result = await _httpClient.DeleteAsync($"api/product/deleteproduct/{product.ProductId}");
+        }
     }
 }

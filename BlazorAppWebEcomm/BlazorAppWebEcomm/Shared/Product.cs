@@ -12,7 +12,7 @@ namespace BlazorAppWebEcomm.Shared
         public string? Title { get; set; }
         public string? Description { get; set; }
         public string? ImageUrl { get; set; }
-        public bool? Featured { get; set; }
+        public bool Featured { get; set; }
         public Category Category { get; set; }
         public int? CategoryId { get; set; }
         public List<ProductVariant> ProductVariants { get; set; } = new List<ProductVariant>();

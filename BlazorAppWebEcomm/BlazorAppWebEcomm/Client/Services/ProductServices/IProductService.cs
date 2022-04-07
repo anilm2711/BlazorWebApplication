@@ -20,6 +20,9 @@
         Task<List<string>> GetProductSearchSuggestion(string searchText);
         Task GetAdminProducts();
 
+        Task<Product> CreateProductAsync(Product product);
+        Task<Product> UpdateProductAsync(Product product);
+        Task DeleteProductAsync(Product product);
 
     }
 }
