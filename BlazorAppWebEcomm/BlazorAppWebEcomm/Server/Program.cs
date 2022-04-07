@@ -11,11 +11,12 @@ global using BlazorAppWebEcomm.Server.Services.AddressService;
 global using Microsoft.AspNetCore.Authentication.JwtBearer;
 global using Microsoft.IdentityModel.Tokens;
 global using BlazorAppWebEcomm.Server.Services.ProductTypeServices;
+global using Serilog;
 
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
-
+builder.Host.UseSerilog();
 builder.Services.AddControllersWithViews();
 builder.Services.AddRazorPages();
 builder.Services.AddDbContext<ECommDatabaseContext>(options =>

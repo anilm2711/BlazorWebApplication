@@ -44,7 +44,7 @@ else
         {
             <div class="row">
                 <div class="col">
-                    <InputSelect disabled="item.Deleted" @bind-Value="item.ProductTypeId" class="form-control">
+                    <InputSelect disabled="@item.Deleted" @bind-Value="item.ProductTypeId" class="form-control">
                         @foreach (var ptype in productTypeService.productTypes)
                         {
                     <option value="@ptype.Id.ToString()">@ptype.Name</option>
@@ -53,16 +53,16 @@ else
         </div>
 
         <div class="col">
-            <InputNumber @bind-Value="item.Price" disabled="item.Deleted" class="form-control"></InputNumber>
+            <InputNumber @bind-Value="item.Price" disabled="@item.Deleted" class="form-control"></InputNumber>
         </div>
         <div class="col">
-            <InputNumber @bind-Value="item.OriginalPrice" disabled="item.Deleted" class="form-control"></InputNumber>
+            <InputNumber @bind-Value="item.OriginalPrice" disabled="@item.Deleted" class="form-control"></InputNumber>
         </div>
         <div class="col col-visible">
-            <InputCheckbox @bind-Value="item.Visible" style="transform:scale(1.5,1.5);" disabled="item.Deleted"></InputCheckbox>
+            <InputCheckbox @bind-Value="item.Visible" style="transform:scale(1.5,1.5);" disabled="@item.Deleted"></InputCheckbox>
         </div>
         <div class="col">
-            <button class="btn btn-primary" disabled="item.Deleted" @onclick="@(()=>RemoveVariant(item.ProductTypeId))">
+            <button class="btn btn-primary" disabled="@item.Deleted" @onclick="@(()=>RemoveVariant(item.ProductTypeId))">
                 <i class="oi oi-trash"></i>
             </button>
         </div>
