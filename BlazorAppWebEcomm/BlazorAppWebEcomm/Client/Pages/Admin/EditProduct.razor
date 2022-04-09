@@ -47,28 +47,28 @@ else
                     <InputSelect disabled="@item.Deleted" @bind-Value="item.ProductTypeId" class="form-control">
                         @foreach (var ptype in productTypeService.productTypes)
                         {
-                    <option value="@ptype.Id.ToString()">@ptype.Name</option>
+                            <option value="@ptype.Id.ToString()">@ptype.Name</option>
                         }
-            </InputSelect>
-        </div>
+                    </InputSelect>
+                </div>
 
-        <div class="col">
-            <InputNumber @bind-Value="item.Price" disabled="@item.Deleted" class="form-control"></InputNumber>
-        </div>
-        <div class="col">
-            <InputNumber @bind-Value="item.OriginalPrice" disabled="@item.Deleted" class="form-control"></InputNumber>
-        </div>
-        <div class="col col-visible">
-            <InputCheckbox @bind-Value="item.Visible" style="transform:scale(1.5,1.5);" disabled="@item.Deleted"></InputCheckbox>
-        </div>
-        <div class="col">
-            <button class="btn btn-primary" disabled="@item.Deleted" @onclick="@(()=>RemoveVariant(item.ProductTypeId))">
-                <i class="oi oi-trash"></i>
-            </button>
-        </div>
-    </div>
+                <div class="col">
+                    <InputNumber @bind-Value="item.Price" disabled="@item.Deleted" class="form-control"></InputNumber>
+                </div>
+                <div class="col">
+                    <InputNumber @bind-Value="item.OriginalPrice" disabled="@item.Deleted" class="form-control"></InputNumber>
+                </div>
+                <div class="col col-visible">
+                    <InputCheckbox @bind-Value="item.Visible" style="transform:scale(1.5,1.5);" disabled="@item.Deleted"></InputCheckbox>
+                </div>
+                <div class="col">
+                    <button type="button" class="btn btn-primary" disabled="@item.Deleted" @onclick="@(()=>RemoveVariant(item.ProductTypeId))">
+                        <i class="oi oi-trash"></i>
+                    </button>
+                </div>
+           </div>
         }
-        <button class="btn btn-primary" @onclick="AddVariant">
+        <button type="button" class="btn btn-primary" @onclick="AddVariant">
             <i class="oi io-plus"></i>Add Variant
         </button>
         <hr />
@@ -79,21 +79,27 @@ else
                 {
                 <option value="@category.Id">@category.Name</option>
                 }
-        </InputSelect>
-    </div>
-    <hr />
+            </InputSelect>
+        </div>
+        <hr />
 
-            <div class="form-check">
-                <InputCheckbox id="featured" @bind-Value="product.Featured" class="form-check-input"></InputCheckbox>
-                <label for="featured" class="form-check-label">Featured</label>
-            </div>
-      
+         <div class="form-check">
+            <InputCheckbox id="featured" @bind-Value="product.Featured" class="form-check-input"></InputCheckbox>
+            <label for="featured" class="form-check-label">Featured</label>
+         </div>
+
         <div class="form-check">
             <InputCheckbox id="visible" @bind-Value="product.Visible" class="form-check-input"></InputCheckbox>
             <label for="visible" class="form-check-label">Visible</label>
         </div>
-        <hr />
+    <hr />
         <button type="submit" class="btn btn-primary float-end">@btnText</button>
         <ValidationSummary></ValidationSummary>
     </EditForm>
+        if (product != null && (product.IsNew == false ||product.IsNew==null))
+        {
+            <button type="button" class="btn btn-danger float-start" @onclick="DeleteProduct">
+                Delete Product
+            </button>
+        }
 }

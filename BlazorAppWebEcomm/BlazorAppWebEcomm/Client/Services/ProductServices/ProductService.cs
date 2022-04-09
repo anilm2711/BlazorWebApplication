@@ -24,7 +24,7 @@ namespace BlazorAppWebEcomm.Client.Services.ProductServices
             var result = await _httpClient.GetFromJsonAsync<ServiceResponse<List<Product>>>("api/Product/getFeaturedProductsAsync");
             if (result != null && result.Data != null)
                 Products = result.Data;
-            ProductsChanged.Invoke();
+            ProductsChanged?.Invoke();
         }
 
         public async Task<ServiceResponse<Product>> GetProduct(int productId)
@@ -86,7 +86,7 @@ namespace BlazorAppWebEcomm.Client.Services.ProductServices
 
         public async Task<Product> CreateProductAsync(Product product)
         {
-            var result = await _httpClient.PostAsJsonAsync("api/product/creteproduct", product);
+            var result = await _httpClient.PostAsJsonAsync("api/product/createproduct", product);
             var newproduct = (await result.Content.ReadFromJsonAsync<ServiceResponse<Product>>()).Data;
             return newproduct;
         }

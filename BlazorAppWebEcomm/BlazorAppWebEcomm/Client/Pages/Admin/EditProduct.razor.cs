@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Components;
+using Microsoft.JSInterop;
 
 namespace BlazorAppWebEcomm.Client.Pages.Admin
 {
@@ -12,6 +13,8 @@ namespace BlazorAppWebEcomm.Client.Pages.Admin
         public ICategoryService categoryService { get; set; }
         [Inject]
         public NavigationManager navigationManager { get; set; }
+        [Inject]
+        public IJSRuntime jSRuntime { get; set; }
 
         [Parameter]
         public int id { get; set; }
@@ -49,18 +52,21 @@ namespace BlazorAppWebEcomm.Client.Pages.Admin
         }
         void RemoveVariant(int productTypeId)
         {
-            var variant = product.ProductVariants.Find(p => p.ProductTypeId == productTypeId);
-            if(variant==null)
+            var Xvariant = product.ProductVariants.Where(p => p.ProductTypeId == productTypeId).ToList();
+            foreach (var variant in Xvariant)
             {
-                return ;
-            }
-            if(variant.IsNew==true)
-            {
-                product.ProductVariants.Remove(variant);
-            }
-            else
-            {
-                variant.Deleted = true;
+                if (variant == null)
+                {
+                    return;
+                }
+                if (variant.IsNew == true)
+                {
+                    product.ProductVariants.Remove(variant);
+                }
+                else
+                {
+                    variant.Deleted = true;
+                }
             }
         }
 
@@ -81,9 +87,19 @@ namespace BlazorAppWebEcomm.Client.Pages.Admin
                 product = await productService.UpdateProductAsync(product);
                 navigationManager.NavigateTo($"admin/product/{product.ProductId}",true);
             }
+        }
 
-
-
+        async void DeleteProduct()
+        {
+            if (product.ProductId > 0)
+            {
+                var confirmed = await jSRuntime.InvokeAsync<bool>("confirm", $"do you really want to delete '{product.Title}'?");
+                if (confirmed)
+                {
+                    await productService.DeleteProductAsync(product);
+                    navigationManager.NavigateTo("admin/products");
+                }
+            }
         }
     }
 }

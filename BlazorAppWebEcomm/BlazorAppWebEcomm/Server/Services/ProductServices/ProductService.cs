@@ -21,7 +21,7 @@ namespace BlazorAppWebEcomm.Server.Services.ProductServices
             if (httpContextAccessor.HttpContext.User.IsInRole("Admin") == true)
             {
                 product = await _eCommDataBaseContext.Products
-                 .Include(e => e.ProductVariants.Where(p => p.Visible == true ))
+                 .Include(e => e.ProductVariants.Where(p => p.Visible == true))
                  .ThenInclude(x => x.ProductType).FirstOrDefaultAsync(p => p.ProductId == productId && p.Visible == true);
             }
             else
@@ -209,27 +209,31 @@ namespace BlazorAppWebEcomm.Server.Services.ProductServices
             dbProduct.Featured  = product.Featured;
             foreach (var item in product.ProductVariants)
             {
-                var dbVariant =await _eCommDataBaseContext.ProductVariants.SingleOrDefaultAsync(p => p.ProductId == item.ProductId
-                  && p.ProductType == item.ProductType);
-                if(dbVariant==null)
+                var dbVariant =await _eCommDataBaseContext.ProductVariants.Where(p => p.ProductId == item.ProductId
+                  && p.ProductTypeId == item.ProductTypeId).ToListAsync();
+                if (dbVariant == null || dbVariant.Count == 0)
                 {
                     item.ProductType = null;
                     _eCommDataBaseContext.ProductVariants.Add(item);
                 }
                 else
                 {
-                    dbVariant.ProductTypeId = item.ProductTypeId;
-                    dbVariant.Price = item.Price;
-                    dbVariant.OriginalPrice = item.OriginalPrice;
-                    dbVariant.Visible = item.Visible;
-                    dbVariant.Deleted = item.Deleted;
+                    foreach (var x in dbVariant)
+                    {
+                        x.ProductTypeId = item.ProductTypeId;
+                        x.Price = item.Price;
+                        x.OriginalPrice = item.OriginalPrice;
+                        x.Visible = item.Visible;
+                        x.Deleted = item.Deleted;
+
+                    }
                 }
             }
             await _eCommDataBaseContext.SaveChangesAsync();
 
             return new ServiceResponse<Models.Product>
             {
-                Data = dbProduct
+                Data = product
             };
         }
 
