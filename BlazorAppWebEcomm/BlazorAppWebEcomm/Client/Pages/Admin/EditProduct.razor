@@ -77,7 +77,7 @@ else
             <InputSelect id="category" @bind-Value="product.CategoryId" class="form-control">
                 @foreach (var category in categoryService.AdminCategories)
                 {
-                <option value="@category.Id">@category.Name</option>
+                <option value="@category.Id.ToString()">@category.Name</option>
                 }
             </InputSelect>
         </div>
