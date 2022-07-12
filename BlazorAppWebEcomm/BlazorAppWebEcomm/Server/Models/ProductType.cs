@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Text.Json.Serialization;
-
 namespace BlazorAppWebEcomm.Server.Models
 {
     public partial class ProductType

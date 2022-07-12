@@ -19,6 +19,7 @@ namespace BlazorAppWebEcomm.Server.Models
         public virtual DbSet<Address> Addresses { get; set; } = null!;
         public virtual DbSet<CartItem> CartItems { get; set; } = null!;
         public virtual DbSet<Category> Categories { get; set; } = null!;
+        public virtual DbSet<Image> Images { get; set; } = null!;
         public virtual DbSet<Order> Orders { get; set; } = null!;
         public virtual DbSet<OrderItem> OrderItems { get; set; } = null!;
         public virtual DbSet<Product> Products { get; set; } = null!;
@@ -73,6 +74,17 @@ namespace BlazorAppWebEcomm.Server.Models
                 entity.Property(e => e.Visible)
                     .IsRequired()
                     .HasDefaultValueSql("((1))");
+            });
+
+            modelBuilder.Entity<Image>(entity =>
+            {
+                entity.ToTable("Image");
+
+                entity.HasOne(d => d.Product)
+                    .WithMany(p => p.Images)
+                    .HasForeignKey(d => d.ProductId)
+                    .OnDelete(DeleteBehavior.ClientSetNull)
+                    .HasConstraintName("FK_Image_Image");
             });
 
             modelBuilder.Entity<Order>(entity =>

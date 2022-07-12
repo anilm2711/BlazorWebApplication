@@ -7,6 +7,7 @@ namespace BlazorAppWebEcomm.Server.Models
     {
         public Product()
         {
+            Images = new HashSet<Image>();
             OrderItems = new HashSet<OrderItem>();
             ProductVariants = new HashSet<ProductVariant>();
         }
@@ -21,6 +22,7 @@ namespace BlazorAppWebEcomm.Server.Models
         public bool Deleted { get; set; }
 
         public virtual Category? Category { get; set; }
+        public virtual ICollection<Image> Images { get; set; }
         public virtual ICollection<OrderItem> OrderItems { get; set; }
         public virtual ICollection<ProductVariant> ProductVariants { get; set; }
     }
