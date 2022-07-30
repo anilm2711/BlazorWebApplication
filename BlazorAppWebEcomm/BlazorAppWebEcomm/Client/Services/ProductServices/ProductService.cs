@@ -19,12 +19,20 @@ namespace BlazorAppWebEcomm.Client.Services.ProductServices
         public string LastSearchText { get; set; } = string.Empty;
         public List<Product> AdminProducts { get; set; } = new List<Product>();
 
+
         public async Task GetProducts()
         {
-            var result = await _httpClient.GetFromJsonAsync<ServiceResponse<List<Product>>>("api/Product/getFeaturedProductsAsync");
-            if (result != null && result.Data != null)
-                Products = result.Data;
-            ProductsChanged?.Invoke();
+            try
+            {
+                var result = await _httpClient.GetFromJsonAsync<ServiceResponse<List<Product>>>("api/Product/getFeaturedProductsAsync");
+                if (result != null && result.Data != null)
+                    Products = result.Data;
+                ProductsChanged?.Invoke();
+            }
+            catch(Exception ex)
+            {
+
+            }
         }
 
         public async Task<ServiceResponse<Product>> GetProduct(int productId)

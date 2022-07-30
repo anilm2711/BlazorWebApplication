@@ -80,10 +80,8 @@ namespace BlazorAppWebEcomm.Server.Models
             {
                 entity.ToTable("Image");
 
-                entity.HasOne(d => d.Product)
-                    .WithMany(p => p.Images)
-                    .HasForeignKey(d => d.ProductId)
-                    .HasConstraintName("FK_Image_Image");
+                entity.HasKey(d => d.Id);
+                    
             });
 
             modelBuilder.Entity<Order>(entity =>

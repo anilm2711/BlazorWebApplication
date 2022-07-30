@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace BlazorAppWebEcomm.Shared
 {
-    public class Product
+    public partial class Product
     {
         public int ProductId { get; set; }
         public string? Title { get; set; }

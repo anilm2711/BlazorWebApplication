@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace BlazorAppWebEcomm.Shared
 {
-    public class Image
+    public partial class Image
     {
         public int Id { get; set; }
         public string Data { get; set; } = string.Empty;

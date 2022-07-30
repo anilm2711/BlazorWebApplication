@@ -22,13 +22,17 @@ namespace BlazorAppWebEcomm.Server.Services.ProductServices
             {
                 product = await _eCommDataBaseContext.Products
                  .Include(e => e.ProductVariants.Where(p => p.Visible == true))
-                 .ThenInclude(x => x.ProductType).FirstOrDefaultAsync(p => p.ProductId == productId && p.Visible == true);
+                 .ThenInclude(x => x.ProductType)
+                 .Include(e=>e.Images)
+                 .FirstOrDefaultAsync(p => p.ProductId == productId && p.Visible == true);
             }
             else
             {
                 product = await _eCommDataBaseContext.Products
                     .Include(e => e.ProductVariants.Where(p => p.Visible == true && p.Deleted == false))
-                    .ThenInclude(x => x.ProductType).FirstOrDefaultAsync(p => p.ProductId == productId && p.Visible == true && p.Deleted == false);
+                    .ThenInclude(x => x.ProductType)
+                    .Include(e=>e.Images)
+                    .FirstOrDefaultAsync(p => p.ProductId == productId && p.Visible == true && p.Deleted == false);
             }
             if (product == null)
             {
@@ -68,7 +72,9 @@ namespace BlazorAppWebEcomm.Server.Services.ProductServices
                 responseProdcuts = new ServiceResponse<List<Models.Product>>()
                 {
                     Data = await _eCommDataBaseContext.Products.Where(p => p.Visible == true && p.Deleted == false)
-                    .Include(e => e.ProductVariants.Where(p=>p.Visible==true && p.Deleted==false)).ToListAsync()
+                                                        .Include(e => e.Images)
+                                                        .Include(e => e.ProductVariants.Where(p=>p.Visible==true && p.Deleted==false))
+                                                        .ToListAsync()
                 };
             }
             catch (Exception ex)
@@ -86,7 +92,9 @@ namespace BlazorAppWebEcomm.Server.Services.ProductServices
             decimal r = (await FindProduct(searchText)).Count()/pageResult;
             int pageCount =Convert.ToInt32(Math.Ceiling(r));
             List<Models.Product>? products = await _eCommDataBaseContext.Products.Where(x => x.Description.ToLower().Contains(searchText.ToLower())
-                                  || x.Title.ToLower().Contains(searchText.ToLower()) && x.Visible == true && x.Deleted == false).Include(e => e.ProductVariants.Where(x=> x.Visible == true && x.Deleted == false))
+                                  || x.Title.ToLower().Contains(searchText.ToLower()) && x.Visible == true && x.Deleted == false)
+                                  .Include(e => e.ProductVariants.Where(x=> x.Visible == true && x.Deleted == false))
+                                  .Include(x=>x.Images)
                                  .Skip((page - 1) * pageResult)
                                  .Take(pageResult)
                                  .ToListAsync();
@@ -107,7 +115,10 @@ namespace BlazorAppWebEcomm.Server.Services.ProductServices
         public async Task<List<Models.Product>> FindProduct(string searchText)
         {
             return await _eCommDataBaseContext.Products.Where(x => x.Description.ToLower().Contains(searchText.ToLower())
-                                || x.Title.ToLower().Contains(searchText.ToLower()) && x.Visible==true && x.Deleted==false).Include(e => e.ProductVariants.Where(p=> p.Visible == true && p.Deleted == false)).ToListAsync();
+                                || x.Title.ToLower().Contains(searchText.ToLower()) && x.Visible==true && x.Deleted==false)
+                .Include(e => e.ProductVariants.Where(p=> p.Visible == true && p.Deleted == false))
+                .Include(x=>x.Images)
+                .ToListAsync();
         }
 
         public async Task<ServiceResponse<List<string>>> GetProductSearchSuggestion(string searchText)
@@ -141,11 +152,14 @@ namespace BlazorAppWebEcomm.Server.Services.ProductServices
         public async Task<ServiceResponse<List<Models.Product>>> GetFeaturedProductsAsync()
         {
             ServiceResponse<List<Models.Product>> responseProdcuts = new ServiceResponse<List<Models.Product>>();
+            var images =  _eCommDataBaseContext.Products.Include(p=>p.Images).Where(p => p.ProductId == 1043).FirstOrDefault().Images;
             try
             {
                 responseProdcuts = new ServiceResponse<List<Models.Product>>()
                 {
-                    Data = await _eCommDataBaseContext.Products.Where(x=> x.Visible == true && x.Deleted == false).Include(e => e.ProductVariants.Where(x=> x.Visible == true && x.Deleted == false)).Where(p=>p.Featured==true).ToListAsync()
+                    Data = await _eCommDataBaseContext.Products.Include(p=>p.Images).Where(x=> x.Visible == true && x.Deleted == false)
+                    .Include(e => e.ProductVariants.Where(x=> x.Visible == true && x.Deleted == false))
+                    .Where(p=>p.Featured==true).ToListAsync()
                 };
             }
             catch (Exception ex)
@@ -164,7 +178,10 @@ namespace BlazorAppWebEcomm.Server.Services.ProductServices
                 responseProdcuts = new ServiceResponse<List<Models.Product>>()
                 {
                     Data = await _eCommDataBaseContext.Products.Where(p => p.Deleted == false)
-                    .Include(e => e.ProductVariants.Where(p => p.Deleted == false)).ThenInclude(v=>v.ProductType).ToListAsync()
+                    .Include(e => e.ProductVariants.Where(p => p.Deleted == false))
+                    .ThenInclude(v=>v.ProductType)
+                    .Include(x=>x.Images)
+                    .ToListAsync()
                     
                 };
             }
