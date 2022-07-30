@@ -7,8 +7,8 @@ namespace BlazorAppWebEcomm.Server.Models
     {
         public int Id { get; set; }
         public string? Data { get; set; }
-        public int ProductId { get; set; }
+        public int? ProductId { get; set; }
 
-        public virtual Product Product { get; set; } = null!;
+        public virtual Product? Product { get; set; }
     }
 }

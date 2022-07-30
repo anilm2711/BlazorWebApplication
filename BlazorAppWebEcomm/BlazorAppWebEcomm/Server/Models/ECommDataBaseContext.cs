@@ -83,7 +83,6 @@ namespace BlazorAppWebEcomm.Server.Models
                 entity.HasOne(d => d.Product)
                     .WithMany(p => p.Images)
                     .HasForeignKey(d => d.ProductId)
-                    .OnDelete(DeleteBehavior.ClientSetNull)
                     .HasConstraintName("FK_Image_Image");
             });
 
