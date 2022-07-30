@@ -53,7 +53,7 @@ namespace BlazorAppWebEcomm.Server.Services.ProductServices
             {
                 responseProdcuts = new ServiceResponse<List<Models.Product>>()
                 {
-                    Data = await _eCommDataBaseContext.Products.Where(x=> x.Visible == true && x.Deleted == false).Include(x => x.ProductVariants.Where(v=> v.Visible == true && v.Deleted == false)).Where(p => p.Category.Url.ToLower().Equals(categoryUrl.ToLower())).ToListAsync()
+                    Data = await _eCommDataBaseContext.Products.Include(x=>x.Images).Where(x=> x.Visible == true && x.Deleted == false).Include(x => x.ProductVariants.Where(v=> v.Visible == true && v.Deleted == false)).Where(p => p.Category.Url.ToLower().Equals(categoryUrl.ToLower())).ToListAsync()
                 };
             }
             catch (Exception ex)
@@ -209,7 +209,9 @@ namespace BlazorAppWebEcomm.Server.Services.ProductServices
 
         public async Task<ServiceResponse<Models.Product>> UpdateProductAsync(Models.Product product)
         {
-            var dbProduct = await _eCommDataBaseContext.Products.Where(p=>p.ProductId==product.ProductId).FirstOrDefaultAsync();
+            var dbProduct = await _eCommDataBaseContext.Products
+                                                        .Include(p=>p.Images)
+                                                        .Where(p=>p.ProductId==product.ProductId).FirstOrDefaultAsync();
             if (dbProduct == null)
             {
                 return new ServiceResponse<Models.Product>()
@@ -224,6 +226,14 @@ namespace BlazorAppWebEcomm.Server.Services.ProductServices
             dbProduct.Visible = product.Visible;
             dbProduct.Title = product.Title;
             dbProduct.Featured  = product.Featured;
+
+            //Update funactionality --  Remove all the images related to Product
+            _eCommDataBaseContext.Images.RemoveRange(dbProduct.Images);
+
+            //Update multiple Images
+            dbProduct.Images = product.Images;
+
+
             foreach (var item in product.ProductVariants)
             {
                 var dbVariant =await _eCommDataBaseContext.ProductVariants.Where(p => p.ProductId == item.ProductId

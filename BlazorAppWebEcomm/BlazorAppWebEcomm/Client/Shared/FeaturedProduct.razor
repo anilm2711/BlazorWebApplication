@@ -12,9 +12,18 @@ else
             {
                 <div class="featured-product">
                     <div>
-                        <a href="product/@item.ProductId">
-                            <img src="@item.ImageUrl">
-                        </a>
+                        @if (!string.IsNullOrEmpty(item.ImageUrl))
+                        {
+                            <a href="product/@item.ProductId">
+                                <img src="@item.ImageUrl">
+                            </a>
+                        }
+                        else if (item.Images.Count() > 0)
+                        {
+                            <a href="product/@item.ProductId">
+                                <img src="@item.Images.FirstOrDefault().Data" />
+                            </a>
+                        }
                     </div>
                     <h6> <a href="product/@item.ProductId">@item.Title</a> </h6>
                     @if (item.ProductVariants != null && item.ProductVariants.Count() > 0)

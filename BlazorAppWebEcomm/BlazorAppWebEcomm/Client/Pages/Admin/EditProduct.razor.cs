@@ -4,7 +4,7 @@ using Microsoft.JSInterop;
 
 namespace BlazorAppWebEcomm.Client.Pages.Admin
 {
-    public partial class EditProduct:ComponentBase
+    public partial class EditProduct : ComponentBase
     {
         [Inject]
         public IProductService productService { get; set; }
@@ -21,7 +21,7 @@ namespace BlazorAppWebEcomm.Client.Pages.Admin
         public int id { get; set; }
         Product product = new Product();
         string btnText = "";
-        string message="Loading...";
+        string message = "Loading...";
         bool loading = true;
 
         protected override async Task OnInitializedAsync()
@@ -31,7 +31,7 @@ namespace BlazorAppWebEcomm.Client.Pages.Admin
         }
         protected override async Task OnParametersSetAsync()
         {
-            if(id==0)
+            if (id == 0)
             {
                 product = new Product() { IsNew = true };
                 btnText = "Create Product";
@@ -39,9 +39,9 @@ namespace BlazorAppWebEcomm.Client.Pages.Admin
             else
             {
                 Product dbProduct = (await productService.GetProduct(id)).Data;
-                if(product ==null)
+                if (product == null)
                 {
-                    message = $"Product with Id '{ id }' does not exist.";
+                    message = $"Product with Id '{id}' does not exist.";
                     return;
                 }
                 product = dbProduct;
@@ -73,11 +73,11 @@ namespace BlazorAppWebEcomm.Client.Pages.Admin
 
         void AddVariant()
         {
-            product.ProductVariants.Add(new ProductVariant { IsNew=true,ProductId=product.ProductId});
+            product.ProductVariants.Add(new ProductVariant { IsNew = true, ProductId = product.ProductId });
         }
-        async void  AddOrUpdateProduct()
+        async void AddOrUpdateProduct()
         {
-            if(product.IsNew==true)
+            if (product.IsNew == true)
             {
                 var result = await productService.CreateProductAsync(product);
                 navigationManager.NavigateTo($"admin/product/{result.ProductId}");
@@ -86,7 +86,7 @@ namespace BlazorAppWebEcomm.Client.Pages.Admin
             {
                 product.IsNew = false;
                 product = await productService.UpdateProductAsync(product);
-                navigationManager.NavigateTo($"admin/product/{product.ProductId}",true);
+                navigationManager.NavigateTo($"admin/product/{product.ProductId}", true);
             }
         }
 
@@ -112,6 +112,16 @@ namespace BlazorAppWebEcomm.Client.Pages.Admin
                 await reSizedImage.OpenReadStream().ReadAsync(buffer);
                 var imageData = $"data:{format};base64,{Convert.ToBase64String(buffer)}";
                 product.Images.Add(new Image { Data = imageData });
+            }
+
+        }
+
+        void RemoveImage(int id)
+        {
+            var image = product.Images.FirstOrDefault(p => p.Id == id);
+            if (image != null)
+            {
+                product.Images.Remove(image);
             }
 
         }

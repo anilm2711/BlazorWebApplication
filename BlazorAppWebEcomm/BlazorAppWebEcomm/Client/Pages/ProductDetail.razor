@@ -4,14 +4,28 @@
 {
     <div class="media">
         <div class="media-img-wrapper mr-2">
-            <img class="media-img" src=@Product.ImageUrl alt=@Product.Title>
+            @if (!string.IsNullOrEmpty(@Product.ImageUrl))
+            {
+                <img class="media-img" src=@Product.ImageUrl alt=@Product.Title>
+            }
+            else
+            {
+                <MudCarousel Class="mud-width-full" ItemsSource="@Product.Images" Style="height:500px;">
+                    <ItemTemplate>
+                        <div class="d-flex flex-column flex-column justify-center" style="height:100%">
+                            <MudImage Src="@context.Data"></MudImage>
+                        </div>
+                    </ItemTemplate>
+                </MudCarousel>
+            }
+
         </div>
         <div class="media-body">
             <h2 class="mb-0">@Product.Title</h2>
             <p>@Product.Description</p>
             @if (Product.ProductVariants != null && Product.ProductVariants.Count() > 0)
             {
-                <div class="mb-3"> 
+                <div class="mb-3">
                     <select class="form-select" @bind=@currentTypeId>
                         @foreach (var vart in Product.ProductVariants)
                         {

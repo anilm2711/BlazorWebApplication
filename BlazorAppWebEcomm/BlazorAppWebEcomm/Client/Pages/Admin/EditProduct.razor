@@ -25,7 +25,7 @@ else
             <InputText id="imageUrl" @bind-Value="product.ImageUrl" class="form-control"></InputText>
         </div>
         <div class="mb-0">
-            @if(!string.IsNullOrEmpty(product.ImageUrl))
+            @if (!string.IsNullOrEmpty(product.ImageUrl))
             {
                 <img src="@product.ImageUrl" />
             }
@@ -33,7 +33,15 @@ else
             {
                 foreach (var image in product.Images)
                 {
-                    <img src="@image.Data" />
+                    <MudCard Class="ma-2">
+                        <MudCardContent>
+                            <MudImage Src="@image.Data"></MudImage>
+                        </MudCardContent>
+                        <MudCardActions Style="justify-content :center;">
+                            <MudButton Variant="Variant.Filled" Color="Color.Error"  OnClick="@(()=>RemoveImage(image.Id))">Remove
+                            </MudButton>
+                        </MudCardActions>
+                    </MudCard>
                 }
             }
         </div>
@@ -61,26 +69,26 @@ else
                     <InputSelect disabled="@item.Deleted" @bind-Value="item.ProductTypeId" class="form-control">
                         @foreach (var ptype in productTypeService.productTypes)
                         {
-                            <option value="@ptype.Id.ToString()">@ptype.Name</option>
+                    <option value="@ptype.Id.ToString()">@ptype.Name</option>
                         }
-                    </InputSelect>
-                </div>
+            </InputSelect>
+        </div>
 
-                <div class="col">
-                    <InputNumber @bind-Value="item.Price" disabled="@item.Deleted" class="form-control"></InputNumber>
-                </div>
-                <div class="col">
-                    <InputNumber @bind-Value="item.OriginalPrice" disabled="@item.Deleted" class="form-control"></InputNumber>
-                </div>
-                <div class="col col-visible">
-                    <InputCheckbox @bind-Value="item.Visible" style="transform:scale(1.5,1.5);" disabled="@item.Deleted"></InputCheckbox>
-                </div>
-                <div class="col">
-                    <button type="button" class="btn btn-primary" disabled="@item.Deleted" @onclick="@(()=>RemoveVariant(item.ProductTypeId))">
-                        <i class="oi oi-trash"></i>
-                    </button>
-                </div>
-           </div>
+        <div class="col">
+            <InputNumber @bind-Value="item.Price" disabled="@item.Deleted" class="form-control"></InputNumber>
+        </div>
+        <div class="col">
+            <InputNumber @bind-Value="item.OriginalPrice" disabled="@item.Deleted" class="form-control"></InputNumber>
+        </div>
+        <div class="col col-visible">
+            <InputCheckbox @bind-Value="item.Visible" style="transform:scale(1.5,1.5);" disabled="@item.Deleted"></InputCheckbox>
+        </div>
+        <div class="col">
+            <button type="button" class="btn btn-primary" disabled="@item.Deleted" @onclick="@(()=>RemoveVariant(item.ProductTypeId))">
+                <i class="oi oi-trash"></i>
+            </button>
+        </div>
+    </div>
         }
         <button type="button" class="btn btn-primary" @onclick="AddVariant">
             <i class="oi io-plus"></i>Add Variant
@@ -93,27 +101,27 @@ else
                 {
                 <option value="@category.Id.ToString()">@category.Name</option>
                 }
-            </InputSelect>
-        </div>
-        <hr />
-
-         <div class="form-check">
-            <InputCheckbox id="featured" @bind-Value="product.Featured" class="form-check-input"></InputCheckbox>
-            <label for="featured" class="form-check-label">Featured</label>
-         </div>
-
-        <div class="form-check">
-            <InputCheckbox id="visible" @bind-Value="product.Visible" class="form-check-input"></InputCheckbox>
-            <label for="visible" class="form-check-label">Visible</label>
-        </div>
+        </InputSelect>
+    </div>
     <hr />
-        <button type="submit" class="btn btn-primary float-end">@btnText</button>
-        <ValidationSummary></ValidationSummary>
-    </EditForm>
-        if (product != null && (product.IsNew == false ||product.IsNew==null))
-        {
-            <button type="button" class="btn btn-danger float-start" @onclick="DeleteProduct">
-                Delete Product
-            </button>
-        }
+
+    <div class="form-check">
+        <InputCheckbox id="featured" @bind-Value="product.Featured" class="form-check-input"></InputCheckbox>
+        <label for="featured" class="form-check-label">Featured</label>
+    </div>
+
+    <div class="form-check">
+        <InputCheckbox id="visible" @bind-Value="product.Visible" class="form-check-input"></InputCheckbox>
+        <label for="visible" class="form-check-label">Visible</label>
+    </div>
+    <hr />
+    <button type="submit" class="btn btn-primary float-end">@btnText</button>
+    <ValidationSummary></ValidationSummary>
+</EditForm>
+    if (product != null && (product.IsNew == false || product.IsNew == null))
+    {
+        <button type="button" class="btn btn-danger float-start" @onclick="DeleteProduct">
+            Delete Product
+        </button>
+    }
 }

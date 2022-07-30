@@ -12,6 +12,8 @@ global using Microsoft.AspNetCore.Components.Authorization;
 global using BlazorAppWebEcomm.Client.Services.OrderService;
 global using BlazorAppWebEcomm.Client.Services.AddressService;
 global using BlazorAppWebEcomm.Client.Services.ProductTypeService;
+using MudBlazor.Services;
+
 
 var builder = WebAssemblyHostBuilder.CreateDefault(args);
 builder.RootComponents.Add<App>("#app");
@@ -28,4 +30,5 @@ builder.Services.AddScoped<IProductTypeService, ProductTypeService>();
 builder.Services.AddOptions();
 builder.Services.AddAuthorizationCore();
 builder.Services.AddScoped<AuthenticationStateProvider, CustomAuthenticateStateProvider>();
+builder.Services.AddMudServices();
 await builder.Build().RunAsync();
