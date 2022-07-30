@@ -14,7 +14,7 @@ namespace BlazorAppWebEcomm.Shared
         public string? ImageUrl { get; set; }
         public List<Image> Images { get; set; } = new List<Image>();
         public bool Featured { get; set; }
-        public Category Category { get; set; }
+        public Category? Category { get; set; }
         public int? CategoryId { get; set; }
         public List<ProductVariant> ProductVariants { get; set; } = new List<ProductVariant>();
 
